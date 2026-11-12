@@ -3,907 +3,1164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>X3 NHỊP SỐNG — Hệ Điều Hành Lối Sống Offline</title>
+  <title>X3 Nhịp Sống</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0A0C0E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#111214">
   <style>
     :root {
-      --bg: #0A0C0E;
-      --card: #121519;
-      --card-border: #1E232B;
-      --gold: #D4AF37;
-      --gold-dim: rgba(212, 175, 55, 0.15);
-      --gold-glow: rgba(212, 175, 55, 0.3);
-      --text: #F1F3F5;
-      --text-muted: #8A92A0;
-      --text-dim: #505663;
-      --green: #2ECC71;
-      --green-dim: rgba(46, 204, 113, 0.15);
-      --red: #E74C3C;
-      --accent: #3498DB;
-      --radius: 16px;
-      --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
-      --font-display: 'Space Grotesk', sans-serif;
+      --bg: #111214;
+      --surface: #17181B;
+      --surface-hover: #1E2024;
+      --border: #26282E;
+      --border-strong: #383B44;
+      --text: #EAEAE6;
+      --text-secondary: #92969E;
+      --text-muted: #5C6068;
+      --accent: #C8A253;
+      --accent-dim: rgba(200, 162, 83, 0.12);
+      --ok: #4E9A6F;
+      --ok-dim: rgba(78, 154, 111, 0.14);
+      --radius: 6px;
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-body);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 0;
-      overflow-x: hidden;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
-    .app-container {
-      width: 100%;
-      max-width: 480px;
-      min-height: 100vh;
+
+    .shell {
+      max-width: 520px;
+      margin: 0 auto;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      position: relative;
-      background: var(--bg);
-      padding-bottom: 90px;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding-bottom: 76px;
     }
-    /* Header */
+
+    @media (max-width: 520px) {
+      .shell {
+        border-left: none;
+        border-right: none;
+      }
+    }
+
     header {
-      padding: 20px 20px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       position: sticky;
       top: 0;
-      background: rgba(10, 12, 14, 0.85);
-      backdrop-filter: blur(12px);
-      z-index: 50;
-      border-bottom: 1px solid var(--card-border);
+      z-index: 40;
+      background: rgba(17, 18, 20, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
+
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .brand-logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #1E232B, #0E1013);
-      border: 1px solid var(--gold);
+
+    .mark {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--gold);
-      font-family: var(--font-display);
+      font-family: var(--font-mono);
+      font-size: 12px;
       font-weight: 700;
-      font-size: 16px;
-      box-shadow: 0 0 16px var(--gold-glow);
+      color: var(--accent);
+      letter-spacing: -0.02em;
     }
-    .brand-text h1 {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: #fff;
-    }
-    .brand-text p {
-      font-size: 11px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .offline-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #141A16;
-      border: 1px solid #1D3A24;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 11px;
+
+    .brand-title {
+      font-size: 14px;
       font-weight: 600;
-      color: var(--green);
+      letter-spacing: 0.04em;
+      color: var(--text);
     }
-    .offline-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
-    }
-    /* Main Content */
-    main {
-      padding: 16px 20px;
+
+    .header-meta {
       display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    /* Section Cards */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 18px;
-      position: relative;
-      transition: all 0.2s ease;
-    }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .net-state {
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .section {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
       margin-bottom: 14px;
     }
-    .card-title {
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--gold);
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
     }
-    .card-subtitle {
-      font-size: 12px;
+
+    .section-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
       color: var(--text-muted);
     }
-    /* 1. One Thing Hero */
-    .hero-card {
-      background: linear-gradient(145deg, #181D24, #0F1216);
-      border: 1px solid rgba(212, 175, 55, 0.35);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease), transform 0.12s var(--ease), color 0.18s var(--ease);
     }
-    .onething-input-box {
-      margin-top: 10px;
+
+    button:active {
+      transform: scale(0.98);
     }
-    .onething-input {
-      width: 100%;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 15px;
-      color: #fff;
+
+    .btn-primary {
+      background: var(--accent);
+      color: #111214;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 8px 14px;
+      font-size: 13px;
       font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: #D4B062;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--border-strong);
+      color: var(--text);
+    }
+
+    .onething-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-box {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.18s var(--ease);
     }
-    .onething-input:focus {
-      border-color: var(--gold);
+
+    .input-box::placeholder {
+      color: var(--text-muted);
     }
-    .onething-active-box {
-      margin-top: 10px;
+
+    .input-box:focus {
+      border-color: var(--accent);
+    }
+
+    .onething-locked {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
-    .onething-text {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.4;
-    }
-    .onething-meta {
+
+    .onething-row {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
+      align-items: flex-start;
+      gap: 12px;
     }
-    .btn-finish {
-      background: var(--gold);
-      color: #0A0C0E;
-      border: none;
-      padding: 9px 18px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-finish:active { transform: scale(0.97); }
-    .btn-reset {
+
+    .check-square {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      border: 1.5px solid var(--border-strong);
+      border-radius: 4px;
       background: transparent;
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 8px 14px;
-      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #111214;
       font-size: 12px;
-      cursor: pointer;
+      font-weight: 700;
     }
-    /* 2. 3 Khối Vận Hành */
-    .blocks-grid {
+
+    .check-square.checked {
+      background: var(--ok);
+      border-color: var(--ok);
+    }
+
+    .onething-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .onething-text.done {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .onething-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .block-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
     }
-    .block-row {
+
+    .block-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--card-border);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
       cursor: pointer;
-      transition: all 0.2s;
+      user-select: none;
     }
-    .block-row.active {
-      border-color: var(--gold);
-      background: var(--gold-dim);
+
+    .block-item:last-child {
+      border-bottom: none;
     }
-    .block-info {
+
+    .block-item:hover {
+      background: var(--surface-hover);
+    }
+
+    .block-left {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
+
+    .block-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .block-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+    }
+
     .block-name {
       font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .block-desc {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-    .block-status {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.06);
-      color: var(--text-muted);
-    }
-    .block-row.active .block-status {
-      background: var(--gold);
-      color: #0A0C0E;
-    }
-    .block-row.done .block-status {
-      background: var(--green);
-      color: #0A0C0E;
-    }
-    /* 3. Văn - Tư - Tu */
-    .vtt-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .vtt-item {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px;
-    }
-    .vtt-item-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .vtt-tag {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
-    }
-    .tag-van { background: rgba(52, 152, 219, 0.15); color: #3498DB; }
-    .tag-tu { background: rgba(243, 156, 18, 0.15); color: #F39C12; }
-    .tag-tu-hanh { background: rgba(46, 204, 113, 0.15); color: #2ECC71; }
-    .vtt-input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      outline: none;
-      font-size: 13px;
+      font-weight: 600;
       color: var(--text);
-      font-family: inherit;
     }
-    /* 4. Radar 5 Mục Tiêu */
-    .pillars-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-      margin-top: 10px;
+
+    .block-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
     }
-    .pillar-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 4px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--card-border);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .pillar-btn.scored {
-      border-color: var(--gold);
-      background: var(--gold-dim);
-    }
-    .pillar-icon { font-size: 18px; }
-    .pillar-label { font-size: 10px; font-weight: 700; color: var(--text-muted); }
-    .pillar-val { font-size: 13px; font-weight: 800; color: #fff; }
-    /* 5. Chốt Sổ 3 Dòng */
-    .close-book-form {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .close-input-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 10px 12px;
-    }
-    .close-input-num {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--card-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+    .block-pill {
+      font-family: var(--font-mono);
       font-size: 11px;
-      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
       color: var(--text-muted);
       flex-shrink: 0;
     }
-    .close-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      font-size: 13px;
-      color: #fff;
+
+    .block-item.done .block-pill {
+      background: var(--ok-dim);
+      border-color: var(--ok);
+      color: var(--ok);
     }
-    .btn-save-close {
-      margin-top: 8px;
-      background: linear-gradient(135deg, var(--gold), #B38F26);
-      color: #0A0C0E;
-      border: none;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+
+    .compass-wrap {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 16px;
+      align-items: center;
     }
-    /* Bottom Navigation */
-    nav.bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      max-width: 480px;
-      margin: 0 auto;
-      background: rgba(12, 15, 18, 0.95);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid var(--card-border);
+
+    @media (max-width: 400px) {
+      .compass-wrap {
+        grid-template-columns: 1fr;
+      }
+      .radar-box {
+        margin: 0 auto;
+      }
+    }
+
+    .radar-box {
+      width: 150px;
+      height: 150px;
       display: flex;
-      justify-content: space-around;
-      padding: 10px 16px 14px;
-      z-index: 100;
+      align-items: center;
+      justify-content: center;
     }
-    .nav-item {
+
+    .pillar-list {
       display: flex;
       flex-direction: column;
+      gap: 8px;
+    }
+
+    .pillar-row {
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pillar-row:last-child {
+      border-bottom: none;
+    }
+
+    .pillar-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .pillar-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-btn {
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-btn:hover {
+      border-color: var(--border-strong);
+    }
+
+    .pillar-score {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      width: 28px;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .ledger-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ledger-field {
+      display: flex;
+      flex-direction: column;
       gap: 4px;
+    }
+
+    .ledger-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+    }
+
+    .ledger-input {
+      width: 100%;
       background: transparent;
       border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 6px 0;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.18s var(--ease);
+    }
+
+    .ledger-input:focus {
+      border-bottom-color: var(--accent);
+    }
+
+    .ledger-input::placeholder {
       color: var(--text-muted);
-      font-size: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: color 0.2s;
     }
-    .nav-item.active {
-      color: var(--gold);
+
+    .save-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
     }
-    .nav-icon {
-      font-size: 20px;
-    }
-    /* Toast Alert */
-    .toast {
+
+    .bottom-bar {
       position: fixed;
-      bottom: 100px;
+      bottom: 0;
       left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #1E232B;
-      color: #fff;
-      border: 1px solid var(--gold);
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 12px;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 520px;
+      background: rgba(17, 18, 20, 0.96);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      z-index: 50;
+    }
+
+    @media (max-width: 520px) {
+      .bottom-bar {
+        border-left: none;
+        border-right: none;
+      }
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      padding: 14px 8px;
+      color: var(--text-secondary);
+      font-size: 11px;
       font-weight: 600;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-      z-index: 200;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+
+    .nav-btn:last-child {
+      border-right: none;
     }
-    /* Focus Mode Overlay */
-    .focus-overlay {
+
+    .nav-btn.active {
+      color: var(--accent);
+      background: var(--surface);
+    }
+
+    .overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(10, 12, 14, 0.98);
-      z-index: 300;
+      background: var(--bg);
+      z-index: 100;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      text-align: center;
     }
-    .focus-overlay.active {
+
+    .overlay.open {
       display: flex;
     }
-    .timer-circle {
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      border: 6px solid var(--gold);
+
+    .focus-container {
+      width: 100%;
+      max-width: 380px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      margin: 30px 0;
-      box-shadow: 0 0 40px var(--gold-glow);
+      text-align: center;
     }
-    .timer-val {
-      font-family: var(--font-display);
-      font-size: 48px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .timer-lbl {
+
+    .focus-eyebrow {
+      font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--gold);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-top: 4px;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .timer-ring {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .timer-ring svg {
+      position: absolute;
+      inset: 0;
+      transform: rotate(-90deg);
+    }
+
+    .timer-digits {
+      font-family: var(--font-mono);
+      font-size: 44px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .focus-task {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 28px;
+      max-width: 320px;
+    }
+
+    .focus-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .history-list {
+      width: 100%;
+      max-height: 60vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .history-item {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-date {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .history-line {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 68px;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+      z-index: 120;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
   </style>
 </head>
 <body>
 
-<div class="app-container">
-  <!-- Top Bar -->
+<div class="shell">
   <header>
     <div class="brand">
-      <div class="brand-logo">X3</div>
-      <div class="brand-text">
-        <h1>NHỊP SỐNG</h1>
-        <p>100% Offline OS</p>
-      </div>
+      <div class="mark">X3</div>
+      <div class="brand-title">NHỊP SỐNG</div>
     </div>
-    <div class="offline-badge">
-      <div class="offline-dot"></div>
-      <span>Ngoại Tuyến</span>
+    <div class="header-meta">
+      <span id="headerDate">----</span>
+      <span class="net-state" id="netState">OFFLINE</span>
     </div>
   </header>
 
-  <!-- Main View -->
-  <main id="mainView">
-    <!-- 1. HERO: ONE THING TIÊU ĐIỂM -->
-    <section class="card hero-card" id="oneThingSection">
-      <div class="card-header">
-        <div class="card-title">
-          <span>🎯</span> Tiêu Điểm Sống Còn (One Thing)
-        </div>
-        <div class="card-subtitle" id="focusModeBtnWrap">
-          <button class="btn-reset" onclick="openFocusMode()">Chế Độ Sâu</button>
-        </div>
+  <main>
+    <section class="section">
+      <div class="section-head">
+        <span class="section-title">01 / Tiêu điểm sống còn</span>
+        <span class="section-meta">ONE THING</span>
       </div>
 
-      <div id="onethingEmpty" class="onething-input-box">
-        <input type="text" id="onethingInput" class="onething-input" placeholder="Việc duy nhất hôm nay (Xong việc này coi như thắng)..." onkeypress="handleOneThingKey(event)">
+      <div id="onethingEmpty" class="onething-form">
+        <input type="text" id="onethingInput" class="input-box" placeholder="Nhập duy nhất 1 việc quan trọng nhất hôm nay..." onkeydown="if(event.key==='Enter') lockOneThing()">
+        <button class="btn-primary" onclick="lockOneThing()">Khóa</button>
       </div>
 
-      <div id="onethingActive" class="onething-active-box" style="display:none;">
-        <div class="onething-text" id="onethingDisplay">...</div>
-        <div class="onething-meta">
-          <button class="btn-finish" onclick="completeOneThing()">
-            <span>✓</span> Hoàn Thành
-          </button>
-          <button class="btn-reset" onclick="resetOneThing()">Đổi Việc Khác</button>
+      <div id="onethingLocked" class="onething-locked" style="display:none;">
+        <div class="onething-row">
+          <button class="check-square" id="onethingCheck" onclick="toggleOneThing()">✓</button>
+          <div class="onething-text" id="onethingDisplay"></div>
+        </div>
+        <div class="onething-actions">
+          <button class="btn-ghost" onclick="openFocus()">Vào Khối Sâu 90'</button>
+          <button class="btn-ghost" onclick="resetOneThing()">Thay đổi</button>
         </div>
       </div>
     </section>
 
-    <!-- 2. 3 KHỐI VẬN HÀNH NGÀY -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span>⏳</span> 3 Khối Thời Gian Vận Hành
-        </div>
-        <div class="card-subtitle">80/20 Mỗi Ngày</div>
+    <section class="section">
+      <div class="section-head">
+        <span class="section-title">02 / 3 Khối vận hành</span>
+        <span class="section-meta" id="blocksCounter">0/3</span>
       </div>
-      <div class="blocks-grid">
-        <div class="block-row" id="block1" onclick="toggleBlock(1)">
-          <div class="block-info">
-            <div class="block-name">1. Khối Sâu (08:30 - 11:30)</div>
-            <div class="block-desc">Tắt chuông, dứt điểm duy nhất One Thing</div>
+
+      <div class="block-list">
+        <div class="block-item" id="block1" onclick="toggleBlock(1)">
+          <div class="block-left">
+            <div class="block-top">
+              <span class="block-time">08:30-11:30</span>
+              <span class="block-name">Khối Sâu</span>
+            </div>
+            <span class="block-desc">Ngắt kết nối, dứt điểm duy nhất One Thing</span>
           </div>
-          <div class="block-status" id="blockStat1">Chưa</div>
+          <span class="block-pill" id="blockStat1">CHỜ</span>
         </div>
-        <div class="block-row" id="block2" onclick="toggleBlock(2)">
-          <div class="block-info">
-            <div class="block-name">2. Khối Đòn Bẩy (14:00 - 16:30)</div>
-            <div class="block-desc">Ủy thác AI/kỹ thuật, việc không dùng não tinh hoa</div>
+
+        <div class="block-item" id="block2" onclick="toggleBlock(2)">
+          <div class="block-left">
+            <div class="block-top">
+              <span class="block-time">14:00-16:30</span>
+              <span class="block-name">Khối Đòn Bẩy</span>
+            </div>
+            <span class="block-desc">Vận hành hệ thống, tự động hóa, giao việc</span>
           </div>
-          <div class="block-status" id="blockStat2">Chưa</div>
+          <span class="block-pill" id="blockStat2">CHỜ</span>
         </div>
-        <div class="block-row" id="block3" onclick="toggleBlock(3)">
-          <div class="block-info">
-            <div class="block-name">3. Khối Chuyển Đổi (16:30 - 17:30)</div>
-            <div class="block-desc">Tương tác khách, gieo hạt dòng tiền tươi</div>
+
+        <div class="block-item" id="block3" onclick="toggleBlock(3)">
+          <div class="block-left">
+            <div class="block-top">
+              <span class="block-time">16:30-17:30</span>
+              <span class="block-name">Khối Chuyển Đổi</span>
+            </div>
+            <span class="block-desc">Khách hàng, dòng tiền, truyền thông</span>
           </div>
-          <div class="block-status" id="blockStat3">Chưa</div>
+          <span class="block-pill" id="blockStat3">CHỜ</span>
         </div>
       </div>
     </section>
 
-    <!-- 3. LA BÀN 5 MỤC TIÊU CUỘC ĐỜI -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span>⚖️</span> La Bàn Thân - Tâm - Trí
-        </div>
-        <div class="card-subtitle">Chấm 1 - 5 Điểm</div>
+    <section class="section">
+      <div class="section-head">
+        <span class="section-title">03 / La bàn 5 trụ cột</span>
+        <span class="section-meta" id="pillarAvg">5.0 / 5</span>
       </div>
-      <div class="pillars-grid">
-        <div class="pillar-btn" onclick="cyclePillarScore('health')">
-          <span class="pillar-icon">⚡</span>
-          <span class="pillar-label">THÂN</span>
-          <span class="pillar-val" id="pillVal_health">5/5</span>
+
+      <div class="compass-wrap">
+        <div class="radar-box">
+          <svg id="radarSvg" width="150" height="150" viewBox="0 0 150 150"></svg>
         </div>
-        <div class="pillar-btn" onclick="cyclePillarScore('mind')">
-          <span class="pillar-icon">🧘</span>
-          <span class="pillar-label">TÂM</span>
-          <span class="pillar-val" id="pillVal_mind">5/5</span>
-        </div>
-        <div class="pillar-btn" onclick="cyclePillarScore('intellect')">
-          <span class="pillar-icon">💡</span>
-          <span class="pillar-label">TRÍ</span>
-          <span class="pillar-val" id="pillVal_intellect">5/5</span>
-        </div>
-        <div class="pillar-btn" onclick="cyclePillarScore('career')">
-          <span class="pillar-icon">🚀</span>
-          <span class="pillar-label">NGHIỆP</span>
-          <span class="pillar-val" id="pillVal_career">5/5</span>
-        </div>
-        <div class="pillar-btn" onclick="cyclePillarScore('money')">
-          <span class="pillar-icon">💎</span>
-          <span class="pillar-label">TIỀN</span>
-          <span class="pillar-val" id="pillVal_money">5/5</span>
+
+        <div class="pillar-list">
+          <div class="pillar-row">
+            <span class="pillar-name">Thân (Thể lực)</span>
+            <div class="pillar-controls">
+              <button class="step-btn" onclick="stepPillar('health', -1)">-</button>
+              <span class="pillar-score" id="val_health">5</span>
+              <button class="step-btn" onclick="stepPillar('health', 1)">+</button>
+            </div>
+          </div>
+          <div class="pillar-row">
+            <span class="pillar-name">Tâm (Tĩnh tại)</span>
+            <div class="pillar-controls">
+              <button class="step-btn" onclick="stepPillar('mind', -1)">-</button>
+              <span class="pillar-score" id="val_mind">5</span>
+              <button class="step-btn" onclick="stepPillar('mind', 1)">+</button>
+            </div>
+          </div>
+          <div class="pillar-row">
+            <span class="pillar-name">Trí (Minh triết)</span>
+            <div class="pillar-controls">
+              <button class="step-btn" onclick="stepPillar('intellect', -1)">-</button>
+              <span class="pillar-score" id="val_intellect">5</span>
+              <button class="step-btn" onclick="stepPillar('intellect', 1)">+</button>
+            </div>
+          </div>
+          <div class="pillar-row">
+            <span class="pillar-name">Nghiệp (Giá trị)</span>
+            <div class="pillar-controls">
+              <button class="step-btn" onclick="stepPillar('career', -1)">-</button>
+              <span class="pillar-score" id="val_career">5</span>
+              <button class="step-btn" onclick="stepPillar('career', 1)">+</button>
+            </div>
+          </div>
+          <div class="pillar-row">
+            <span class="pillar-name">Tiền (Tài sản)</span>
+            <div class="pillar-controls">
+              <button class="step-btn" onclick="stepPillar('money', -1)">-</button>
+              <span class="pillar-score" id="val_money">5</span>
+              <button class="step-btn" onclick="stepPillar('money', 1)">+</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 4. VĂN - TƯ - TU TRONG NGÀY -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span>📖</span> Văn — Tư — Tu Tỉnh Thức
-        </div>
-        <div class="card-subtitle">Chuyển Hóa Hành Vi</div>
+    <section class="section">
+      <div class="section-head">
+        <span class="section-title">04 / Văn - Tư - Tu</span>
+        <span class="section-meta">CHUYỂN HÓA</span>
       </div>
-      <div class="vtt-container">
-        <div class="vtt-item">
-          <div class="vtt-item-head">
-            <span class="vtt-tag tag-van">VĂN — Nạp Tri Thức</span>
-          </div>
-          <input type="text" class="vtt-input" id="vttVan" placeholder="1 ý sâu sắc hôm nay đọc / nghe được..." onchange="saveVTT()">
+      <div class="ledger-group">
+        <div class="ledger-field">
+          <label class="ledger-label" for="vttVan">VĂN (Nạp đúng)</label>
+          <input id="vttVan" class="ledger-input" type="text" placeholder="1 tri thức cốt lõi nạp hôm nay" onchange="saveVTT()">
         </div>
-        <div class="vtt-item">
-          <div class="vtt-item-head">
-            <span class="vtt-tag tag-tu">TƯ — Soi Chiếu Phản Biện</span>
-          </div>
-          <input type="text" class="vtt-input" id="vttTu" placeholder="Điểm mù bản thân bị đánh trúng là gì?..." onchange="saveVTT()">
+        <div class="ledger-field">
+          <label class="ledger-label" for="vttTu">TƯ (Soi chiếu)</label>
+          <input id="vttTu" class="ledger-input" type="text" placeholder="Điểm mù hoặc sai lầm nhận ra" onchange="saveVTT()">
         </div>
-        <div class="vtt-item">
-          <div class="vtt-item-head">
-            <span class="vtt-tag tag-tu-hanh">TU — Vi Hành Động</span>
-          </div>
-          <input type="text" class="vtt-input" id="vttTuHanh" placeholder="Hành vi cụ thể sửa đổi ngay trong ngày..." onchange="saveVTT()">
+        <div class="ledger-field">
+          <label class="ledger-label" for="vttTuHanh">TU (Sửa hành vi)</label>
+          <input id="vttTuHanh" class="ledger-input" type="text" placeholder="Hành động cụ thể làm ngay" onchange="saveVTT()">
         </div>
       </div>
     </section>
 
-    <!-- 5. CHỐT SỔ 3 DÒNG (21:30) -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">
-          <span>🌙</span> Chốt Sổ 3 Dòng (21:30)
-        </div>
-        <div class="card-subtitle">Dứt Điểm Ngày</div>
+    <section class="section">
+      <div class="section-head">
+        <span class="section-title">05 / Chốt sổ 3 dòng</span>
+        <span class="section-meta">21:30</span>
       </div>
-      <div class="close-book-form">
-        <div class="close-input-row">
-          <div class="close-input-num">1</div>
-          <input type="text" id="close1" class="close-input" placeholder="Việc lớn đã dứt điểm hôm nay...">
+      <div class="ledger-group">
+        <div class="ledger-field">
+          <label class="ledger-label" for="close1">01. VIỆC ĐÃ DỨT ĐIỂM</label>
+          <input id="close1" class="ledger-input" type="text" placeholder="Kết quả thực chất hoàn thành">
         </div>
-        <div class="close-input-row">
-          <div class="close-input-num">2</div>
-          <input type="text" id="close2" class="close-input" placeholder="Số tiền / chỉ số thực tế phát sinh...">
+        <div class="ledger-field">
+          <label class="ledger-label" for="close2">02. CHỈ SỐ / DÒNG TIỀN</label>
+          <input id="close2" class="ledger-input" type="text" placeholder="Số liệu phát sinh thực tế">
         </div>
-        <div class="close-input-row">
-          <div class="close-input-num">3</div>
-          <input type="text" id="close3" class="close-input" placeholder="Điểm nghẽn cần Kaizen gỡ ngày mai...">
+        <div class="ledger-field">
+          <label class="ledger-label" for="close3">03. ĐIỂM NGHẼN CẦN GỠ</label>
+          <input id="close3" class="ledger-input" type="text" placeholder="1 việc cần Kaizen ngày mai">
         </div>
-        <button class="btn-save-close" onclick="saveCloseBook()">Khóa Sổ Hôm Nay</button>
+      </div>
+      <div class="save-row">
+        <button class="btn-primary" onclick="saveCloseBook()">Lưu chốt sổ</button>
       </div>
     </section>
   </main>
 
-  <!-- Bottom Nav -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchNav('today')">
-      <span class="nav-icon">🧭</span>
-      <span>Hôm Nay</span>
-    </button>
-    <button class="nav-item" onclick="openFocusMode()">
-      <span class="nav-icon">⚡</span>
-      <span>Tập Trung</span>
-    </button>
-    <button class="nav-item" onclick="exportData()">
-      <span class="nav-icon">💾</span>
-      <span>Xuất Dữ Liệu</span>
-    </button>
+  <nav class="bottom-bar">
+    <button class="nav-btn active" onclick="scrollToTop()">Hôm nay</button>
+    <button class="nav-btn" onclick="openFocus()">Khối sâu</button>
+    <button class="nav-btn" onclick="openHistory()">Nhật ký</button>
   </nav>
-
-  <!-- Focus Mode Overlay -->
-  <div class="focus-overlay" id="focusOverlay">
-    <div style="font-size:12px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:1px;">
-      CHẾ ĐỘ SÂU — PHÒNG CÁCH LY THÔNG BÁO
-    </div>
-    <div class="timer-circle">
-      <div class="timer-val" id="timerDisplay">90:00</div>
-      <div class="timer-lbl">Khối Sâu X3</div>
-    </div>
-    <div style="font-size:16px; font-weight:700; color:#fff; max-width:320px; margin-bottom:24px;" id="focusTaskName">
-      Dứt điểm One Thing duy nhất
-    </div>
-    <button class="btn-finish" style="font-size:15px; padding:12px 24px;" onclick="closeFocusMode()">
-      Thoát Ra Màn Hình Chính
-    </button>
-  </div>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">Đã lưu cục bộ 100%</div>
 </div>
 
+<div class="overlay" id="focusOverlay">
+  <div class="focus-container">
+    <div class="focus-eyebrow">CHẾ ĐỘ KHỐI SÂU</div>
+    <div class="timer-ring">
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <circle cx="110" cy="110" r="102" fill="none" stroke="#26282E" stroke-width="2"></circle>
+        <circle id="timerArc" cx="110" cy="110" r="102" fill="none" stroke="#C8A253" stroke-width="2.5" stroke-dasharray="640.88" stroke-dashoffset="0"></circle>
+      </svg>
+      <div class="timer-digits" id="timerDisplay">90:00</div>
+    </div>
+    <div class="focus-task" id="focusTaskLabel">Chưa khóa tiêu điểm</div>
+    <div class="focus-controls">
+      <button class="btn-primary" id="timerToggleBtn" onclick="toggleTimer()">Tạm dừng</button>
+      <button class="btn-ghost" onclick="resetTimer()">Đặt lại</button>
+      <button class="btn-ghost" onclick="closeFocus()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="historyOverlay">
+  <div class="focus-container" style="max-width:440px;">
+    <div class="focus-eyebrow">NHẬT KÝ LƯU TRỮ CỤC BỘ</div>
+    <div class="history-list" id="historyList"></div>
+    <div class="focus-controls">
+      <button class="btn-primary" onclick="exportData()">Xuất JSON</button>
+      <button class="btn-ghost" onclick="closeHistory()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-  // Service Worker Registration for PWA Offline
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     });
   }
 
-  // Local Storage State Key
   const STORAGE_KEY = 'X3_NHIP_SONG_DATA_V1';
+  const todayKey = new Date().toISOString().split('T')[0];
 
-  function getStore() {
+  function updateNetStatus() {
+    const el = document.getElementById('netState');
+    el.textContent = navigator.onLine ? 'LOCAL READY' : 'OFFLINE';
+  }
+  window.addEventListener('online', updateNetStatus);
+  window.addEventListener('offline', updateNetStatus);
+
+  function loadStore() {
     try {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : {};
-    } catch (e) {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    } catch {
       return {};
     }
   }
 
-  function setStore(obj) {
+  function saveStore(data) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
-    } catch (e) {}
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch {}
   }
 
-  function showToast(msg) {
+  function notify(msg) {
     const t = document.getElementById('toast');
-    t.innerText = msg;
+    t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2200);
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
   }
 
-  // App Initialization
-  const todayKey = new Date().toISOString().split('T')[0];
-  let state = getStore();
-  if (!state[todayKey]) {
-    state[todayKey] = {
+  const store = loadStore();
+  if (!store[todayKey]) {
+    store[todayKey] = {
       oneThing: '',
       oneThingDone: false,
       blocks: { 1: false, 2: false, 3: false },
-      pillars: { health: 5, mind: 5, intellect: 5, career: 5, money: 5 },
+      pillars: { health: 4, mind: 4, intellect: 4, career: 4, money: 4 },
       vtt: { van: '', tu: '', tuHanh: '' },
       closeBook: { c1: '', c2: '', c3: '', done: false }
     };
-    setStore(state);
+    saveStore(store);
+  }
+  const day = store[todayKey];
+
+  function drawRadar() {
+    const svg = document.getElementById('radarSvg');
+    const keys = ['health', 'mind', 'intellect', 'career', 'money'];
+    const labels = ['Thân', 'Tâm', 'Trí', 'Nghiệp', 'Tiền'];
+    const cx = 75, cy = 75, maxR = 48;
+    let html = '';
+
+    for (let lvl = 1; lvl <= 5; lvl++) {
+      const r = (maxR / 5) * lvl;
+      const pts = keys.map((_, i) => {
+        const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+        return `${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`;
+      }).join(' ');
+      html += `<polygon points="${pts}" fill="none" stroke="${lvl === 5 ? '#383B44' : '#22242A'}" stroke-width="1" />`;
+    }
+
+    keys.forEach((_, i) => {
+      const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+      const x2 = cx + maxR * Math.cos(angle);
+      const y2 = cy + maxR * Math.sin(angle);
+      const lx = cx + (maxR + 14) * Math.cos(angle);
+      const ly = cy + (maxR + 14) * Math.sin(angle) + 3;
+      html += `<line x1="${cx}" y1="${cy}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#26282E" stroke-width="1" />`;
+      html += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" fill="#92969E" font-size="9" font-family="sans-serif">${labels[i]}</text>`;
+    });
+
+    const dataPts = keys.map((k, i) => {
+      const val = day.pillars[k] || 1;
+      const r = (maxR / 5) * val;
+      const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+      return `${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`;
+    }).join(' ');
+    html += `<polygon points="${dataPts}" fill="rgba(200, 162, 83, 0.18)" stroke="#C8A253" stroke-width="1.5" />`;
+
+    svg.innerHTML = html;
   }
 
-  const curDay = state[todayKey];
+  function render() {
+    document.getElementById('headerDate').textContent = todayKey;
+    updateNetStatus();
 
-  function renderUI() {
-    // One Thing
-    const emptyBox = document.getElementById('onethingEmpty');
-    const activeBox = document.getElementById('onethingActive');
-    const disp = document.getElementById('onethingDisplay');
-    const input = document.getElementById('onethingInput');
+    const emptyEl = document.getElementById('onethingEmpty');
+    const lockedEl = document.getElementById('onethingLocked');
+    const dispEl = document.getElementById('onethingDisplay');
+    const chkEl = document.getElementById('onethingCheck');
 
-    if (curDay.oneThing) {
-      emptyBox.style.display = 'none';
-      activeBox.style.display = 'flex';
-      disp.innerText = (curDay.oneThingDone ? '✅ ' : '🎯 ') + curDay.oneThing;
-      if (curDay.oneThingDone) {
-        disp.style.textDecoration = 'line-through';
-        disp.style.opacity = '0.6';
-      } else {
-        disp.style.textDecoration = 'none';
-        disp.style.opacity = '1';
-      }
-      document.getElementById('focusTaskName').innerText = curDay.oneThing;
+    if (day.oneThing) {
+      emptyEl.style.display = 'none';
+      lockedEl.style.display = 'flex';
+      dispEl.textContent = day.oneThing;
+      dispEl.classList.toggle('done', !!day.oneThingDone);
+      chkEl.classList.toggle('checked', !!day.oneThingDone);
+      chkEl.textContent = day.oneThingDone ? '✓' : '';
+      document.getElementById('focusTaskLabel').textContent = day.oneThing;
     } else {
-      emptyBox.style.display = 'block';
-      activeBox.style.display = 'none';
-      input.value = '';
+      emptyEl.style.display = 'flex';
+      lockedEl.style.display = 'none';
+      document.getElementById('focusTaskLabel').textContent = 'Chưa khóa tiêu điểm';
     }
 
-    // Blocks
+    let doneCount = 0;
     for (let i = 1; i <= 3; i++) {
-      const row = document.getElementById('block' + i);
+      const item = document.getElementById('block' + i);
       const stat = document.getElementById('blockStat' + i);
-      if (curDay.blocks[i]) {
-        row.classList.add('done');
-        stat.innerText = 'Đã Dứt Điểm';
-      } else {
-        row.classList.remove('done');
-        stat.innerText = 'Chưa';
-      }
+      const isDone = !!day.blocks[i];
+      if (isDone) doneCount++;
+      item.classList.toggle('done', isDone);
+      stat.textContent = isDone ? 'XONG' : 'CHỜ';
     }
+    document.getElementById('blocksCounter').textContent = `${doneCount}/3`;
 
-    // Pillars
-    for (const p in curDay.pillars) {
-      const el = document.getElementById('pillVal_' + p);
-      if (el) el.innerText = curDay.pillars[p] + '/5';
+    let sum = 0;
+    for (const k in day.pillars) {
+      const val = day.pillars[k];
+      sum += val;
+      const el = document.getElementById('val_' + k);
+      if (el) el.textContent = val;
     }
+    document.getElementById('pillarAvg').textContent = `${(sum / 5).toFixed(1)} / 5`;
+    drawRadar();
 
-    // VTT
-    document.getElementById('vttVan').value = curDay.vtt.van || '';
-    document.getElementById('vttTu').value = curDay.vtt.tu || '';
-    document.getElementById('vttTuHanh').value = curDay.vtt.tuHanh || '';
-
-    // Close Book
-    document.getElementById('close1').value = curDay.closeBook.c1 || '';
-    document.getElementById('close2').value = curDay.closeBook.c2 || '';
-    document.getElementById('close3').value = curDay.closeBook.c3 || '';
+    document.getElementById('vttVan').value = day.vtt.van || '';
+    document.getElementById('vttTu').value = day.vtt.tu || '';
+    document.getElementById('vttTuHanh').value = day.vtt.tuHanh || '';
+    document.getElementById('close1').value = day.closeBook.c1 || '';
+    document.getElementById('close2').value = day.closeBook.c2 || '';
+    document.getElementById('close3').value = day.closeBook.c3 || '';
   }
 
-  // One Thing handlers
-  function handleOneThingKey(e) {
-    if (e.key === 'Enter') {
-      const val = document.getElementById('onethingInput').value.trim();
-      if (!val) return;
-      curDay.oneThing = val;
-      curDay.oneThingDone = false;
-      state[todayKey] = curDay;
-      setStore(state);
-      renderUI();
-      showToast('Đã khóa mục tiêu One Thing!');
-    }
+  function lockOneThing() {
+    const val = document.getElementById('onethingInput').value.trim();
+    if (!val) return;
+    day.oneThing = val;
+    day.oneThingDone = false;
+    saveStore(store);
+    render();
+    notify('Đã khóa tiêu điểm');
   }
 
-  function completeOneThing() {
-    curDay.oneThingDone = !curDay.oneThingDone;
-    state[todayKey] = curDay;
-    setStore(state);
-    renderUI();
-    showToast(curDay.oneThingDone ? 'Chúc mừng bạn đã thắng ngày hôm nay!' : 'Đã bỏ hoàn thành');
+  function toggleOneThing() {
+    day.oneThingDone = !day.oneThingDone;
+    saveStore(store);
+    render();
   }
 
   function resetOneThing() {
-    curDay.oneThing = '';
-    curDay.oneThingDone = false;
-    state[todayKey] = curDay;
-    setStore(state);
-    renderUI();
+    day.oneThing = '';
+    day.oneThingDone = false;
+    document.getElementById('onethingInput').value = '';
+    saveStore(store);
+    render();
   }
 
-  // 3 Blocks handler
   function toggleBlock(idx) {
-    curDay.blocks[idx] = !curDay.blocks[idx];
-    state[todayKey] = curDay;
-    setStore(state);
-    renderUI();
-    showToast('Cập nhật khối ' + idx);
+    day.blocks[idx] = !day.blocks[idx];
+    saveStore(store);
+    render();
   }
 
-  // Pillars handler
-  function cyclePillarScore(k) {
-    let cur = curDay.pillars[k] || 5;
-    cur = cur === 5 ? 1 : cur + 1;
-    curDay.pillars[k] = cur;
-    state[todayKey] = curDay;
-    setStore(state);
-    renderUI();
+  function stepPillar(key, delta) {
+    const cur = day.pillars[key] || 3;
+    const next = Math.max(1, Math.min(5, cur + delta));
+    if (next !== cur) {
+      day.pillars[key] = next;
+      saveStore(store);
+      render();
+    }
   }
 
-  // VTT Handler
   function saveVTT() {
-    curDay.vtt.van = document.getElementById('vttVan').value;
-    curDay.vtt.tu = document.getElementById('vttTu').value;
-    curDay.vtt.tuHanh = document.getElementById('vttTuHanh').value;
-    state[todayKey] = curDay;
-    setStore(state);
-    showToast('Đã lưu Văn - Tư - Tu');
+    day.vtt.van = document.getElementById('vttVan').value.trim();
+    day.vtt.tu = document.getElementById('vttTu').value.trim();
+    day.vtt.tuHanh = document.getElementById('vttTuHanh').value.trim();
+    saveStore(store);
+    notify('Đã lưu Văn - Tư - Tu');
   }
 
-  // Close Book Handler
   function saveCloseBook() {
-    curDay.closeBook.c1 = document.getElementById('close1').value;
-    curDay.closeBook.c2 = document.getElementById('close2').value;
-    curDay.closeBook.c3 = document.getElementById('close3').value;
-    curDay.closeBook.done = true;
-    state[todayKey] = curDay;
-    setStore(state);
-    showToast('Đã khóa sổ 3 dòng thành công!');
+    day.closeBook.c1 = document.getElementById('close1').value.trim();
+    day.closeBook.c2 = document.getElementById('close2').value.trim();
+    day.closeBook.c3 = document.getElementById('close3').value.trim();
+    day.closeBook.done = true;
+    saveStore(store);
+    notify('Đã lưu chốt sổ 3 dòng');
   }
 
-  // Focus Mode
-  let timerInterval = null;
-  let secondsLeft = 90 * 60;
+  const TOTAL_SEC = 90 * 60;
+  const CIRCUMFERENCE = 2 * Math.PI * 102;
+  let secondsLeft = TOTAL_SEC;
+  let timerId = null;
+  let timerRunning = false;
 
-  function openFocusMode() {
-    document.getElementById('focusOverlay').classList.add('active');
-    if (!timerInterval) {
-      timerInterval = setInterval(() => {
-        if (secondsLeft > 0) {
-          secondsLeft--;
-          const m = Math.floor(secondsLeft / 60);
-          const s = secondsLeft % 60;
-          document.getElementById('timerDisplay').innerText = 
-            (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-        }
-      }, 1000);
+  function renderTimer() {
+    const m = Math.floor(secondsLeft / 60);
+    const s = secondsLeft % 60;
+    document.getElementById('timerDisplay').textContent =
+      `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    const progress = 1 - secondsLeft / TOTAL_SEC;
+    document.getElementById('timerArc').style.strokeDashoffset = (CIRCUMFERENCE * progress).toFixed(2);
+    document.getElementById('timerToggleBtn').textContent = timerRunning ? 'Tạm dừng' : 'Tiếp tục';
+  }
+
+  function startTimerInterval() {
+    if (timerId) clearInterval(timerId);
+    timerRunning = true;
+    timerId = setInterval(() => {
+      if (secondsLeft > 0) {
+        secondsLeft--;
+        renderTimer();
+      } else {
+        clearInterval(timerId);
+        timerRunning = false;
+        renderTimer();
+        notify('Hoàn thành khối sâu 90 phút');
+      }
+    }, 1000);
+    renderTimer();
+  }
+
+  function openFocus() {
+    document.getElementById('focusOverlay').classList.add('open');
+    if (!timerRunning && secondsLeft === TOTAL_SEC) {
+      startTimerInterval();
+    } else {
+      renderTimer();
     }
   }
 
-  function closeFocusMode() {
-    document.getElementById('focusOverlay').classList.remove('active');
+  function toggleTimer() {
+    if (timerRunning) {
+      clearInterval(timerId);
+      timerRunning = false;
+      renderTimer();
+    } else {
+      startTimerInterval();
+    }
   }
 
-  // Export Data
+  function resetTimer() {
+    clearInterval(timerId);
+    timerRunning = false;
+    secondsLeft = TOTAL_SEC;
+    renderTimer();
+  }
+
+  function closeFocus() {
+    document.getElementById('focusOverlay').classList.remove('open');
+  }
+
+  function openHistory() {
+    const listEl = document.getElementById('historyList');
+    const keys = Object.keys(store).sort().reverse();
+    listEl.innerHTML = keys.map(k => {
+      const d = store[k];
+      const blocksDone = [1, 2, 3].filter(i => d.blocks && d.blocks[i]).length;
+      const ot = d.oneThing ? d.oneThing : '(Chưa đặt tiêu điểm)';
+      const c1 = d.closeBook && d.closeBook.c1 ? ` | Chốt: ${d.closeBook.c1}` : '';
+      return `
+        <div class="history-item">
+          <div class="history-date">${k} · Khối ${blocksDone}/3</div>
+          <div class="history-line">${ot}${c1}</div>
+        </div>
+      `;
+    }).join('');
+    document.getElementById('historyOverlay').classList.add('open');
+  }
+
+  function closeHistory() {
+    document.getElementById('historyOverlay').classList.remove('open');
+  }
+
   function exportData() {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(state, null, 2));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute('href', dataStr);
-    dlAnchor.setAttribute('download', 'x3_nhip_song_backup_' + todayKey + '.json');
-    dlAnchor.click();
-    showToast('Đã xuất file lưu trữ cục bộ');
+    const blob = new Blob([JSON.stringify(store, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `x3-nhip-song-${todayKey}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    notify('Đã xuất file JSON');
   }
 
-  function switchNav(tab) {
-    if (tab === 'today') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Initial Run
-  renderUI();
+  render();
 </script>
 </body>
 </html>
