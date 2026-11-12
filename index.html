@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>X3 NHỊP SỐNG — Hệ Điều Hành Lối Sống Offline</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0A0C0E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0C0E;
+      --card: #121519;
+      --card-border: #1E232B;
+      --gold: #D4AF37;
+      --gold-dim: rgba(212, 175, 55, 0.15);
+      --gold-glow: rgba(212, 175, 55, 0.3);
+      --text: #F1F3F5;
+      --text-muted: #8A92A0;
+      --text-dim: #505663;
+      --green: #2ECC71;
+      --green-dim: rgba(46, 204, 113, 0.15);
+      --red: #E74C3C;
+      --accent: #3498DB;
+      --radius: 16px;
+      --font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-display: 'Space Grotesk', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: var(--bg);
+      padding-bottom: 90px;
+    }
+    /* Header */
+    header {
+      padding: 20px 20px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: rgba(10, 12, 14, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1E232B, #0E1013);
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: 0 0 16px var(--gold-glow);
+    }
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+    .brand-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .offline-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #141A16;
+      border: 1px solid #1D3A24;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--green);
+    }
+    .offline-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+    }
+    /* Main Content */
+    main {
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    /* Section Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 18px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    /* 1. One Thing Hero */
+    .hero-card {
+      background: linear-gradient(145deg, #181D24, #0F1216);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .onething-input-box {
+      margin-top: 10px;
+    }
+    .onething-input {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      color: #fff;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .onething-input:focus {
+      border-color: var(--gold);
+    }
+    .onething-active-box {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .onething-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+    }
+    .onething-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-finish {
+      background: var(--gold);
+      color: #0A0C0E;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-finish:active { transform: scale(0.97); }
+    .btn-reset {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    /* 2. 3 Khối Vận Hành */
+    .blocks-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .block-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .block-row.active {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+    .block-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .block-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .block-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .block-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+    }
+    .block-row.active .block-status {
+      background: var(--gold);
+      color: #0A0C0E;
+    }
+    .block-row.done .block-status {
+      background: var(--green);
+      color: #0A0C0E;
+    }
+    /* 3. Văn - Tư - Tu */
+    .vtt-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .vtt-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .vtt-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .vtt-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .tag-van { background: rgba(52, 152, 219, 0.15); color: #3498DB; }
+    .tag-tu { background: rgba(243, 156, 18, 0.15); color: #F39C12; }
+    .tag-tu-hanh { background: rgba(46, 204, 113, 0.15); color: #2ECC71; }
+    .vtt-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      color: var(--text);
+      font-family: inherit;
+    }
+    /* 4. Radar 5 Mục Tiêu */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .pillar-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 4px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pillar-btn.scored {
+      border-color: var(--gold);
+      background: var(--gold-dim);
+    }
+    .pillar-icon { font-size: 18px; }
+    .pillar-label { font-size: 10px; font-weight: 700; color: var(--text-muted); }
+    .pillar-val { font-size: 13px; font-weight: 800; color: #fff; }
+    /* 5. Chốt Sổ 3 Dòng */
+    .close-book-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .close-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .close-input-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .close-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      color: #fff;
+    }
+    .btn-save-close {
+      margin-top: 8px;
+      background: linear-gradient(135deg, var(--gold), #B38F26);
+      color: #0A0C0E;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    /* Bottom Navigation */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 480px;
+      margin: 0 auto;
+      background: rgba(12, 15, 18, 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 16px 14px;
+      z-index: 100;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .nav-item.active {
+      color: var(--gold);
+    }
+    .nav-icon {
+      font-size: 20px;
+    }
+    /* Toast Alert */
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1E232B;
+      color: #fff;
+      border: 1px solid var(--gold);
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 200;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    /* Focus Mode Overlay */
+    .focus-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 12, 14, 0.98);
+      z-index: 300;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .focus-overlay.active {
+      display: flex;
+    }
+    .timer-circle {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 6px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 30px 0;
+      box-shadow: 0 0 40px var(--gold-glow);
+    }
+    .timer-val {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .timer-lbl {
+      font-size: 11px;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Top Bar -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo">X3</div>
+      <div class="brand-text">
+        <h1>NHỊP SỐNG</h1>
+        <p>100% Offline OS</p>
+      </div>
+    </div>
+    <div class="offline-badge">
+      <div class="offline-dot"></div>
+      <span>Ngoại Tuyến</span>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main id="mainView">
+    <!-- 1. HERO: ONE THING TIÊU ĐIỂM -->
+    <section class="card hero-card" id="oneThingSection">
+      <div class="card-header">
+        <div class="card-title">
+          <span>🎯</span> Tiêu Điểm Sống Còn (One Thing)
+        </div>
+        <div class="card-subtitle" id="focusModeBtnWrap">
+          <button class="btn-reset" onclick="openFocusMode()">Chế Độ Sâu</button>
+        </div>
+      </div>
+
+      <div id="onethingEmpty" class="onething-input-box">
+        <input type="text" id="onethingInput" class="onething-input" placeholder="Việc duy nhất hôm nay (Xong việc này coi như thắng)..." onkeypress="handleOneThingKey(event)">
+      </div>
+
+      <div id="onethingActive" class="onething-active-box" style="display:none;">
+        <div class="onething-text" id="onethingDisplay">...</div>
+        <div class="onething-meta">
+          <button class="btn-finish" onclick="completeOneThing()">
+            <span>✓</span> Hoàn Thành
+          </button>
+          <button class="btn-reset" onclick="resetOneThing()">Đổi Việc Khác</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 3 KHỐI VẬN HÀNH NGÀY -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>⏳</span> 3 Khối Thời Gian Vận Hành
+        </div>
+        <div class="card-subtitle">80/20 Mỗi Ngày</div>
+      </div>
+      <div class="blocks-grid">
+        <div class="block-row" id="block1" onclick="toggleBlock(1)">
+          <div class="block-info">
+            <div class="block-name">1. Khối Sâu (08:30 - 11:30)</div>
+            <div class="block-desc">Tắt chuông, dứt điểm duy nhất One Thing</div>
+          </div>
+          <div class="block-status" id="blockStat1">Chưa</div>
+        </div>
+        <div class="block-row" id="block2" onclick="toggleBlock(2)">
+          <div class="block-info">
+            <div class="block-name">2. Khối Đòn Bẩy (14:00 - 16:30)</div>
+            <div class="block-desc">Ủy thác AI/kỹ thuật, việc không dùng não tinh hoa</div>
+          </div>
+          <div class="block-status" id="blockStat2">Chưa</div>
+        </div>
+        <div class="block-row" id="block3" onclick="toggleBlock(3)">
+          <div class="block-info">
+            <div class="block-name">3. Khối Chuyển Đổi (16:30 - 17:30)</div>
+            <div class="block-desc">Tương tác khách, gieo hạt dòng tiền tươi</div>
+          </div>
+          <div class="block-status" id="blockStat3">Chưa</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. LA BÀN 5 MỤC TIÊU CUỘC ĐỜI -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>⚖️</span> La Bàn Thân - Tâm - Trí
+        </div>
+        <div class="card-subtitle">Chấm 1 - 5 Điểm</div>
+      </div>
+      <div class="pillars-grid">
+        <div class="pillar-btn" onclick="cyclePillarScore('health')">
+          <span class="pillar-icon">⚡</span>
+          <span class="pillar-label">THÂN</span>
+          <span class="pillar-val" id="pillVal_health">5/5</span>
+        </div>
+        <div class="pillar-btn" onclick="cyclePillarScore('mind')">
+          <span class="pillar-icon">🧘</span>
+          <span class="pillar-label">TÂM</span>
+          <span class="pillar-val" id="pillVal_mind">5/5</span>
+        </div>
+        <div class="pillar-btn" onclick="cyclePillarScore('intellect')">
+          <span class="pillar-icon">💡</span>
+          <span class="pillar-label">TRÍ</span>
+          <span class="pillar-val" id="pillVal_intellect">5/5</span>
+        </div>
+        <div class="pillar-btn" onclick="cyclePillarScore('career')">
+          <span class="pillar-icon">🚀</span>
+          <span class="pillar-label">NGHIỆP</span>
+          <span class="pillar-val" id="pillVal_career">5/5</span>
+        </div>
+        <div class="pillar-btn" onclick="cyclePillarScore('money')">
+          <span class="pillar-icon">💎</span>
+          <span class="pillar-label">TIỀN</span>
+          <span class="pillar-val" id="pillVal_money">5/5</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. VĂN - TƯ - TU TRONG NGÀY -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>📖</span> Văn — Tư — Tu Tỉnh Thức
+        </div>
+        <div class="card-subtitle">Chuyển Hóa Hành Vi</div>
+      </div>
+      <div class="vtt-container">
+        <div class="vtt-item">
+          <div class="vtt-item-head">
+            <span class="vtt-tag tag-van">VĂN — Nạp Tri Thức</span>
+          </div>
+          <input type="text" class="vtt-input" id="vttVan" placeholder="1 ý sâu sắc hôm nay đọc / nghe được..." onchange="saveVTT()">
+        </div>
+        <div class="vtt-item">
+          <div class="vtt-item-head">
+            <span class="vtt-tag tag-tu">TƯ — Soi Chiếu Phản Biện</span>
+          </div>
+          <input type="text" class="vtt-input" id="vttTu" placeholder="Điểm mù bản thân bị đánh trúng là gì?..." onchange="saveVTT()">
+        </div>
+        <div class="vtt-item">
+          <div class="vtt-item-head">
+            <span class="vtt-tag tag-tu-hanh">TU — Vi Hành Động</span>
+          </div>
+          <input type="text" class="vtt-input" id="vttTuHanh" placeholder="Hành vi cụ thể sửa đổi ngay trong ngày..." onchange="saveVTT()">
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CHỐT SỔ 3 DÒNG (21:30) -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <span>🌙</span> Chốt Sổ 3 Dòng (21:30)
+        </div>
+        <div class="card-subtitle">Dứt Điểm Ngày</div>
+      </div>
+      <div class="close-book-form">
+        <div class="close-input-row">
+          <div class="close-input-num">1</div>
+          <input type="text" id="close1" class="close-input" placeholder="Việc lớn đã dứt điểm hôm nay...">
+        </div>
+        <div class="close-input-row">
+          <div class="close-input-num">2</div>
+          <input type="text" id="close2" class="close-input" placeholder="Số tiền / chỉ số thực tế phát sinh...">
+        </div>
+        <div class="close-input-row">
+          <div class="close-input-num">3</div>
+          <input type="text" id="close3" class="close-input" placeholder="Điểm nghẽn cần Kaizen gỡ ngày mai...">
+        </div>
+        <button class="btn-save-close" onclick="saveCloseBook()">Khóa Sổ Hôm Nay</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchNav('today')">
+      <span class="nav-icon">🧭</span>
+      <span>Hôm Nay</span>
+    </button>
+    <button class="nav-item" onclick="openFocusMode()">
+      <span class="nav-icon">⚡</span>
+      <span>Tập Trung</span>
+    </button>
+    <button class="nav-item" onclick="exportData()">
+      <span class="nav-icon">💾</span>
+      <span>Xuất Dữ Liệu</span>
+    </button>
+  </nav>
+
+  <!-- Focus Mode Overlay -->
+  <div class="focus-overlay" id="focusOverlay">
+    <div style="font-size:12px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:1px;">
+      CHẾ ĐỘ SÂU — PHÒNG CÁCH LY THÔNG BÁO
+    </div>
+    <div class="timer-circle">
+      <div class="timer-val" id="timerDisplay">90:00</div>
+      <div class="timer-lbl">Khối Sâu X3</div>
+    </div>
+    <div style="font-size:16px; font-weight:700; color:#fff; max-width:320px; margin-bottom:24px;" id="focusTaskName">
+      Dứt điểm One Thing duy nhất
+    </div>
+    <button class="btn-finish" style="font-size:15px; padding:12px 24px;" onclick="closeFocusMode()">
+      Thoát Ra Màn Hình Chính
+    </button>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">Đã lưu cục bộ 100%</div>
+</div>
+
+<script>
+  // Service Worker Registration for PWA Offline
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
+
+  // Local Storage State Key
+  const STORAGE_KEY = 'X3_NHIP_SONG_DATA_V1';
+
+  function getStore() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function setStore(obj) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    } catch (e) {}
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // App Initialization
+  const todayKey = new Date().toISOString().split('T')[0];
+  let state = getStore();
+  if (!state[todayKey]) {
+    state[todayKey] = {
+      oneThing: '',
+      oneThingDone: false,
+      blocks: { 1: false, 2: false, 3: false },
+      pillars: { health: 5, mind: 5, intellect: 5, career: 5, money: 5 },
+      vtt: { van: '', tu: '', tuHanh: '' },
+      closeBook: { c1: '', c2: '', c3: '', done: false }
+    };
+    setStore(state);
+  }
+
+  const curDay = state[todayKey];
+
+  function renderUI() {
+    // One Thing
+    const emptyBox = document.getElementById('onethingEmpty');
+    const activeBox = document.getElementById('onethingActive');
+    const disp = document.getElementById('onethingDisplay');
+    const input = document.getElementById('onethingInput');
+
+    if (curDay.oneThing) {
+      emptyBox.style.display = 'none';
+      activeBox.style.display = 'flex';
+      disp.innerText = (curDay.oneThingDone ? '✅ ' : '🎯 ') + curDay.oneThing;
+      if (curDay.oneThingDone) {
+        disp.style.textDecoration = 'line-through';
+        disp.style.opacity = '0.6';
+      } else {
+        disp.style.textDecoration = 'none';
+        disp.style.opacity = '1';
+      }
+      document.getElementById('focusTaskName').innerText = curDay.oneThing;
+    } else {
+      emptyBox.style.display = 'block';
+      activeBox.style.display = 'none';
+      input.value = '';
+    }
+
+    // Blocks
+    for (let i = 1; i <= 3; i++) {
+      const row = document.getElementById('block' + i);
+      const stat = document.getElementById('blockStat' + i);
+      if (curDay.blocks[i]) {
+        row.classList.add('done');
+        stat.innerText = 'Đã Dứt Điểm';
+      } else {
+        row.classList.remove('done');
+        stat.innerText = 'Chưa';
+      }
+    }
+
+    // Pillars
+    for (const p in curDay.pillars) {
+      const el = document.getElementById('pillVal_' + p);
+      if (el) el.innerText = curDay.pillars[p] + '/5';
+    }
+
+    // VTT
+    document.getElementById('vttVan').value = curDay.vtt.van || '';
+    document.getElementById('vttTu').value = curDay.vtt.tu || '';
+    document.getElementById('vttTuHanh').value = curDay.vtt.tuHanh || '';
+
+    // Close Book
+    document.getElementById('close1').value = curDay.closeBook.c1 || '';
+    document.getElementById('close2').value = curDay.closeBook.c2 || '';
+    document.getElementById('close3').value = curDay.closeBook.c3 || '';
+  }
+
+  // One Thing handlers
+  function handleOneThingKey(e) {
+    if (e.key === 'Enter') {
+      const val = document.getElementById('onethingInput').value.trim();
+      if (!val) return;
+      curDay.oneThing = val;
+      curDay.oneThingDone = false;
+      state[todayKey] = curDay;
+      setStore(state);
+      renderUI();
+      showToast('Đã khóa mục tiêu One Thing!');
+    }
+  }
+
+  function completeOneThing() {
+    curDay.oneThingDone = !curDay.oneThingDone;
+    state[todayKey] = curDay;
+    setStore(state);
+    renderUI();
+    showToast(curDay.oneThingDone ? 'Chúc mừng bạn đã thắng ngày hôm nay!' : 'Đã bỏ hoàn thành');
+  }
+
+  function resetOneThing() {
+    curDay.oneThing = '';
+    curDay.oneThingDone = false;
+    state[todayKey] = curDay;
+    setStore(state);
+    renderUI();
+  }
+
+  // 3 Blocks handler
+  function toggleBlock(idx) {
+    curDay.blocks[idx] = !curDay.blocks[idx];
+    state[todayKey] = curDay;
+    setStore(state);
+    renderUI();
+    showToast('Cập nhật khối ' + idx);
+  }
+
+  // Pillars handler
+  function cyclePillarScore(k) {
+    let cur = curDay.pillars[k] || 5;
+    cur = cur === 5 ? 1 : cur + 1;
+    curDay.pillars[k] = cur;
+    state[todayKey] = curDay;
+    setStore(state);
+    renderUI();
+  }
+
+  // VTT Handler
+  function saveVTT() {
+    curDay.vtt.van = document.getElementById('vttVan').value;
+    curDay.vtt.tu = document.getElementById('vttTu').value;
+    curDay.vtt.tuHanh = document.getElementById('vttTuHanh').value;
+    state[todayKey] = curDay;
+    setStore(state);
+    showToast('Đã lưu Văn - Tư - Tu');
+  }
+
+  // Close Book Handler
+  function saveCloseBook() {
+    curDay.closeBook.c1 = document.getElementById('close1').value;
+    curDay.closeBook.c2 = document.getElementById('close2').value;
+    curDay.closeBook.c3 = document.getElementById('close3').value;
+    curDay.closeBook.done = true;
+    state[todayKey] = curDay;
+    setStore(state);
+    showToast('Đã khóa sổ 3 dòng thành công!');
+  }
+
+  // Focus Mode
+  let timerInterval = null;
+  let secondsLeft = 90 * 60;
+
+  function openFocusMode() {
+    document.getElementById('focusOverlay').classList.add('active');
+    if (!timerInterval) {
+      timerInterval = setInterval(() => {
+        if (secondsLeft > 0) {
+          secondsLeft--;
+          const m = Math.floor(secondsLeft / 60);
+          const s = secondsLeft % 60;
+          document.getElementById('timerDisplay').innerText = 
+            (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+        }
+      }, 1000);
+    }
+  }
+
+  function closeFocusMode() {
+    document.getElementById('focusOverlay').classList.remove('active');
+  }
+
+  // Export Data
+  function exportData() {
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(state, null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute('href', dataStr);
+    dlAnchor.setAttribute('download', 'x3_nhip_song_backup_' + todayKey + '.json');
+    dlAnchor.click();
+    showToast('Đã xuất file lưu trữ cục bộ');
+  }
+
+  function switchNav(tab) {
+    if (tab === 'today') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Initial Run
+  renderUI();
+</script>
+</body>
+</html>
