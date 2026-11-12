@@ -2,26 +2,28 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>X3 Nhịp Sống</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#111214">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
     :root {
       --bg: #111214;
-      --surface: #17181B;
-      --surface-hover: #1E2024;
-      --border: #26282E;
-      --border-strong: #383B44;
-      --text: #EAEAE6;
-      --text-secondary: #92969E;
-      --text-muted: #5C6068;
+      --surface: #18191D;
+      --surface-2: #202227;
+      --border: #272930;
+      --border-strong: #3A3D47;
+      --text: #ECECE8;
+      --text-2: #9498A1;
+      --text-3: #5E626B;
       --accent: #C8A253;
-      --accent-dim: rgba(200, 162, 83, 0.12);
+      --accent-soft: rgba(200, 162, 83, 0.12);
       --ok: #4E9A6F;
-      --ok-dim: rgba(78, 154, 111, 0.14);
-      --radius: 6px;
-      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --ok-soft: rgba(78, 154, 111, 0.14);
+      --radius: 8px;
+      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
       --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
       --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -34,165 +36,183 @@
     }
 
     html, body {
-      background: var(--bg);
+      height: 100%;
+      background: #0B0C0E;
       color: var(--text);
       font-family: var(--font-sans);
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.45;
       -webkit-font-smoothing: antialiased;
+      overflow: hidden;
     }
 
-    .shell {
-      max-width: 520px;
+    .app {
+      max-width: 480px;
+      height: 100dvh;
       margin: 0 auto;
-      min-height: 100dvh;
+      background: var(--bg);
       display: flex;
       flex-direction: column;
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
-      padding-bottom: 76px;
+      position: relative;
     }
 
-    @media (max-width: 520px) {
-      .shell {
-        border-left: none;
-        border-right: none;
-      }
+    @media (max-width: 480px) {
+      .app { border-left: none; border-right: none; }
     }
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      background: rgba(17, 18, 20, 0.94);
-      backdrop-filter: blur(8px);
+    .topbar {
+      flex-shrink: 0;
+      padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
       border-bottom: 1px solid var(--border);
-      padding: 14px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background: var(--bg);
     }
 
-    .brand {
+    .topbar-left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .mark {
-      width: 28px;
-      height: 28px;
+    .app-mark {
+      width: 26px;
+      height: 26px;
       border: 1px solid var(--accent);
-      border-radius: var(--radius);
+      border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--accent);
-      letter-spacing: -0.02em;
     }
 
-    .brand-title {
+    .topbar-title {
       font-size: 14px;
       font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--text);
+      letter-spacing: 0.02em;
     }
 
-    .header-meta {
+    .topbar-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--text-secondary);
+      color: var(--text-2);
     }
 
-    .net-state {
-      padding: 2px 6px;
+    .streak-chip {
+      padding: 3px 7px;
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 4px;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
+      color: var(--accent);
+      font-size: 11px;
     }
 
-    .section {
-      padding: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-head {
+    .viewport {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px;
       display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 14px;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    .section-title {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-secondary);
+    .tab-pane {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      animation: paneIn 0.18s var(--ease);
     }
 
-    .section-meta {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
+    .tab-pane.active {
+      display: flex;
+    }
+
+    @keyframes paneIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     button {
       font-family: inherit;
       cursor: pointer;
-      transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease), transform 0.12s var(--ease), color 0.18s var(--ease);
+      border: none;
+      background: none;
+      color: inherit;
+      transition: background-color 0.15s var(--ease), border-color 0.15s var(--ease), transform 0.1s var(--ease);
     }
 
-    button:active {
-      transform: scale(0.98);
-    }
+    button:active { transform: scale(0.98); }
 
     .btn-primary {
       background: var(--accent);
       color: #111214;
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 8px 14px;
-      font-size: 13px;
       font-weight: 600;
-    }
-
-    .btn-primary:hover {
-      background: #D4B062;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid var(--border);
+      font-size: 13px;
+      padding: 9px 14px;
       border-radius: var(--radius);
-      padding: 7px 12px;
-      font-size: 12px;
-      font-weight: 500;
     }
 
-    .btn-ghost:hover {
+    .btn-secondary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      font-weight: 500;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+    }
+
+    .btn-secondary:hover {
       border-color: var(--border-strong);
       color: var(--text);
     }
 
-    .onething-form {
+    .label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .label-cap {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-2);
+    }
+
+    .label-mono {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-3);
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    .onething-entry {
       display: flex;
       gap: 8px;
     }
 
-    .input-box {
+    .field-input {
       width: 100%;
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 10px 12px;
@@ -200,319 +220,325 @@
       font-family: inherit;
       font-size: 14px;
       outline: none;
-      transition: border-color 0.18s var(--ease);
     }
 
-    .input-box::placeholder {
-      color: var(--text-muted);
-    }
+    .field-input:focus { border-color: var(--accent); }
+    .field-input::placeholder { color: var(--text-3); }
 
-    .input-box:focus {
-      border-color: var(--accent);
-    }
-
-    .onething-locked {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px;
+    .onething-active {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .onething-row {
+    .onething-main {
       display: flex;
       align-items: flex-start;
       gap: 12px;
     }
 
-    .check-square {
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
+    .chk-box {
+      width: 22px;
+      height: 22px;
       border: 1.5px solid var(--border-strong);
-      border-radius: 4px;
-      background: transparent;
+      border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      margin-top: 1px;
       color: #111214;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
     }
 
-    .check-square.checked {
+    .chk-box.done {
       background: var(--ok);
       border-color: var(--ok);
     }
 
-    .onething-text {
-      font-size: 15px;
+    .onething-title {
+      font-size: 16px;
       font-weight: 500;
-      color: var(--text);
-      line-height: 1.45;
+      line-height: 1.4;
       flex: 1;
     }
 
-    .onething-text.done {
+    .onething-title.done {
       text-decoration: line-through;
-      color: var(--text-muted);
+      color: var(--text-3);
     }
 
-    .onething-actions {
+    .onething-footer {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       padding-top: 10px;
       border-top: 1px solid var(--border);
     }
 
-    .block-list {
-      display: flex;
-      flex-direction: column;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .block-item {
+    .focus-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 14px;
       background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      user-select: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
     }
 
-    .block-item:last-child {
-      border-bottom: none;
-    }
-
-    .block-item:hover {
-      background: var(--surface-hover);
-    }
-
-    .block-left {
+    .focus-bar-info {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .block-top {
+    .focus-bar-time {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .focus-bar-sub {
+      font-size: 11px;
+      color: var(--text-2);
+    }
+
+    .list-group {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .list-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .list-row:last-child { border-bottom: none; }
+    .list-row:active { background: var(--surface-2); }
+
+    .list-row.current {
+      box-shadow: inset 2px 0 0 var(--accent);
+    }
+
+    .row-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .row-head {
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .block-time {
+    .row-time {
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--accent);
     }
 
-    .block-name {
+    .row-title {
       font-size: 13px;
       font-weight: 600;
-      color: var(--text);
     }
 
-    .block-desc {
+    .row-sub {
       font-size: 12px;
-      color: var(--text-secondary);
+      color: var(--text-2);
     }
 
-    .block-pill {
+    .state-tag {
       font-family: var(--font-mono);
-      font-size: 11px;
-      padding: 3px 8px;
+      font-size: 10px;
+      padding: 3px 7px;
       border-radius: 4px;
       border: 1px solid var(--border);
-      color: var(--text-muted);
-      flex-shrink: 0;
+      color: var(--text-3);
     }
 
-    .block-item.done .block-pill {
-      background: var(--ok-dim);
+    .list-row.done .state-tag {
+      background: var(--ok-soft);
       border-color: var(--ok);
       color: var(--ok);
     }
 
-    .compass-wrap {
+    .quick-strip {
       display: grid;
-      grid-template-columns: 150px 1fr;
-      gap: 16px;
-      align-items: center;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
-    @media (max-width: 400px) {
-      .compass-wrap {
-        grid-template-columns: 1fr;
-      }
-      .radar-box {
-        margin: 0 auto;
-      }
-    }
-
-    .radar-box {
-      width: 150px;
-      height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .pillar-list {
+    .radar-panel {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      align-items: center;
+      gap: 14px;
     }
 
-    .pillar-row {
+    .diagnosis-box {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--text-2);
+    }
+
+    .pillar-grid {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pillar-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 4px 0;
+      padding: 6px 0;
       border-bottom: 1px solid var(--border);
     }
 
-    .pillar-row:last-child {
-      border-bottom: none;
-    }
+    .pillar-item:last-child { border-bottom: none; }
 
-    .pillar-name {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-    }
-
-    .pillar-controls {
+    .stepper {
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
     .step-btn {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
+      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 4px;
-      background: var(--surface);
-      color: var(--text);
       font-family: var(--font-mono);
-      font-size: 13px;
+      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .step-btn:hover {
-      border-color: var(--border-strong);
-    }
-
-    .pillar-score {
+    .step-val {
       font-family: var(--font-mono);
-      font-size: 12px;
-      width: 28px;
+      width: 24px;
       text-align: center;
-      color: var(--text);
+      font-size: 13px;
     }
 
-    .ledger-group {
+    .ledger-stack {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .ledger-field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .ledger-label {
+    .ledger-item label {
+      display: block;
       font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-secondary);
-      letter-spacing: 0.04em;
+      font-size: 10px;
+      color: var(--text-2);
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
     }
 
-    .ledger-input {
+    .ledger-item input {
       width: 100%;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--border);
-      padding: 6px 0;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 9px 10px;
       color: var(--text);
       font-family: inherit;
       font-size: 13px;
       outline: none;
-      transition: border-color 0.18s var(--ease);
     }
 
-    .ledger-input:focus {
-      border-bottom-color: var(--accent);
+    .ledger-item input:focus { border-color: var(--accent); }
+
+    .history-row {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .ledger-input::placeholder {
-      color: var(--text-muted);
-    }
+    .history-row:last-child { border-bottom: none; }
 
-    .save-row {
-      margin-top: 14px;
+    .history-top {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      margin-bottom: 4px;
     }
 
-    .bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 520px;
-      background: rgba(17, 18, 20, 0.96);
-      backdrop-filter: blur(8px);
-      border-top: 1px solid var(--border);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
+    .history-body {
+      font-size: 12px;
+      color: var(--text-2);
+      line-height: 1.45;
+    }
+
+    .tabbar {
+      flex-shrink: 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      z-index: 50;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
-    @media (max-width: 520px) {
-      .bottom-bar {
-        border-left: none;
-        border-right: none;
-      }
-    }
-
-    .nav-btn {
-      background: transparent;
-      border: none;
-      border-right: 1px solid var(--border);
-      padding: 14px 8px;
-      color: var(--text-secondary);
-      font-size: 11px;
+    .tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px 4px;
+      color: var(--text-3);
+      font-size: 10px;
       font-weight: 600;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      position: relative;
     }
 
-    .nav-btn:last-child {
-      border-right: none;
-    }
-
-    .nav-btn.active {
+    .tab-btn.active {
       color: var(--accent);
-      background: var(--surface);
     }
 
-    .overlay {
+    .tab-btn.active::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 24%;
+      right: 24%;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .tab-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .modal {
       display: none;
       position: fixed;
       inset: 0;
@@ -522,22 +548,12 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-    }
-
-    .overlay.open {
-      display: flex;
-    }
-
-    .focus-container {
-      width: 100%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       text-align: center;
     }
 
-    .focus-eyebrow {
+    .modal.open { display: flex; }
+
+    .modal-eyebrow {
       font-family: var(--font-mono);
       font-size: 11px;
       letter-spacing: 0.12em;
@@ -546,91 +562,71 @@
       margin-bottom: 24px;
     }
 
-    .timer-ring {
+    .ring-wrap {
       position: relative;
       width: 220px;
       height: 220px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
-    .timer-ring svg {
+    .ring-wrap svg {
       position: absolute;
       inset: 0;
       transform: rotate(-90deg);
     }
 
-    .timer-digits {
+    .ring-time {
       font-family: var(--font-mono);
-      font-size: 44px;
+      font-size: 42px;
       font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--text);
       font-variant-numeric: tabular-nums;
     }
 
-    .focus-task {
-      font-size: 15px;
-      font-weight: 500;
+    .breath-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 14px;
       color: var(--text);
-      margin-bottom: 28px;
-      max-width: 320px;
+      margin: 24px 0;
+      transition: transform 4s ease-in-out;
     }
 
-    .focus-controls {
+    .modal-task {
+      font-size: 15px;
+      color: var(--text-2);
+      max-width: 320px;
+      margin-bottom: 24px;
+    }
+
+    .modal-actions {
       display: flex;
       gap: 10px;
     }
 
-    .history-list {
-      width: 100%;
-      max-height: 60vh;
-      overflow-y: auto;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--surface);
-      margin-bottom: 20px;
-      text-align: left;
-    }
-
-    .history-item {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .history-item:last-child {
-      border-bottom: none;
-    }
-
-    .history-date {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-
-    .history-line {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
     .toast {
       position: fixed;
-      bottom: 68px;
+      bottom: 72px;
       left: 50%;
-      transform: translateX(-50%) translateY(8px);
-      background: var(--surface);
+      transform: translateX(-50%) translateY(6px);
+      background: var(--surface-2);
       border: 1px solid var(--border-strong);
       color: var(--text);
-      padding: 8px 14px;
-      border-radius: var(--radius);
+      padding: 7px 14px;
+      border-radius: 5px;
       font-family: var(--font-mono);
       font-size: 11px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+      transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
       z-index: 120;
     }
 
@@ -642,220 +638,257 @@
 </head>
 <body>
 
-<div class="shell">
-  <header>
-    <div class="brand">
-      <div class="mark">X3</div>
-      <div class="brand-title">NHỊP SỐNG</div>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="app-mark">X3</div>
+      <div class="topbar-title" id="topbarTitle">Hôm nay</div>
     </div>
-    <div class="header-meta">
+    <div class="topbar-right">
       <span id="headerDate">----</span>
-      <span class="net-state" id="netState">OFFLINE</span>
+      <span class="streak-chip" id="streakChip">0 ngày</span>
     </div>
   </header>
 
-  <main>
-    <section class="section">
-      <div class="section-head">
-        <span class="section-title">01 / Tiêu điểm sống còn</span>
-        <span class="section-meta">ONE THING</span>
+  <main class="viewport">
+    <section class="tab-pane active" id="pane-today">
+      <div class="panel">
+        <div class="label-row">
+          <span class="label-cap">Tiêu điểm sống còn</span>
+          <span class="label-mono">ONE THING</span>
+        </div>
+
+        <div id="onethingEmpty" class="onething-entry">
+          <input id="onethingInput" class="field-input" type="text" placeholder="1 việc quan trọng nhất hôm nay..." onkeydown="if(event.key==='Enter') lockOneThing()">
+          <button class="btn-primary" onclick="lockOneThing()">Khóa</button>
+        </div>
+
+        <div id="onethingActive" class="onething-active" style="display:none;">
+          <div class="onething-main">
+            <button class="chk-box" id="onethingCheck" onclick="toggleOneThing()">✓</button>
+            <div class="onething-title" id="onethingDisplay"></div>
+          </div>
+          <div class="onething-footer">
+            <button class="btn-secondary" onclick="resetOneThing()">Đổi việc</button>
+            <button class="btn-primary" onclick="openFocus()">Vào Khối Sâu 90'</button>
+          </div>
+        </div>
       </div>
 
-      <div id="onethingEmpty" class="onething-form">
-        <input type="text" id="onethingInput" class="input-box" placeholder="Nhập duy nhất 1 việc quan trọng nhất hôm nay..." onkeydown="if(event.key==='Enter') lockOneThing()">
-        <button class="btn-primary" onclick="lockOneThing()">Khóa</button>
+      <div class="focus-bar">
+        <div class="focus-bar-info">
+          <div class="focus-bar-time" id="inlineTimer">90:00</div>
+          <div class="focus-bar-sub" id="inlineTimerSub">Bộ đếm Khối Sâu ngoại tuyến</div>
+        </div>
+        <button class="btn-secondary" onclick="openFocus()">Mở đồng hồ</button>
       </div>
 
-      <div id="onethingLocked" class="onething-locked" style="display:none;">
-        <div class="onething-row">
-          <button class="check-square" id="onethingCheck" onclick="toggleOneThing()">✓</button>
-          <div class="onething-text" id="onethingDisplay"></div>
+      <div>
+        <div class="label-row">
+          <span class="label-cap">3 Khối vận hành</span>
+          <span class="label-mono" id="blocksCounter">0/3</span>
         </div>
-        <div class="onething-actions">
-          <button class="btn-ghost" onclick="openFocus()">Vào Khối Sâu 90'</button>
-          <button class="btn-ghost" onclick="resetOneThing()">Thay đổi</button>
+        <div class="list-group">
+          <div class="list-row" id="block1" onclick="toggleBlock(1)">
+            <div class="row-main">
+              <div class="row-head">
+                <span class="row-time">08:30-11:30</span>
+                <span class="row-title">Khối Sâu</span>
+              </div>
+              <span class="row-sub">Dứt điểm One Thing, ngắt xao nhãng</span>
+            </div>
+            <span class="state-tag" id="blockStat1">CHỜ</span>
+          </div>
+
+          <div class="list-row" id="block2" onclick="toggleBlock(2)">
+            <div class="row-main">
+              <div class="row-head">
+                <span class="row-time">14:00-16:30</span>
+                <span class="row-title">Khối Đòn Bẩy</span>
+              </div>
+              <span class="row-sub">Vận hành hệ thống, ủy thác, tự động hóa</span>
+            </div>
+            <span class="state-tag" id="blockStat2">CHỜ</span>
+          </div>
+
+          <div class="list-row" id="block3" onclick="toggleBlock(3)">
+            <div class="row-main">
+              <div class="row-head">
+                <span class="row-time">16:30-17:30</span>
+                <span class="row-title">Khối Chuyển Đổi</span>
+              </div>
+              <span class="row-sub">Khách hàng, dòng tiền, truyền thông</span>
+            </div>
+            <span class="state-tag" id="blockStat3">CHỜ</span>
+          </div>
         </div>
+      </div>
+
+      <div class="quick-strip">
+        <button class="btn-secondary" onclick="openBreath()">Cắt cơn Dopamine 60s</button>
+        <button class="btn-secondary" onclick="switchTab('close')">Chốt sổ cuối ngày</button>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <span class="section-title">02 / 3 Khối vận hành</span>
-        <span class="section-meta" id="blocksCounter">0/3</span>
-      </div>
-
-      <div class="block-list">
-        <div class="block-item" id="block1" onclick="toggleBlock(1)">
-          <div class="block-left">
-            <div class="block-top">
-              <span class="block-time">08:30-11:30</span>
-              <span class="block-name">Khối Sâu</span>
-            </div>
-            <span class="block-desc">Ngắt kết nối, dứt điểm duy nhất One Thing</span>
-          </div>
-          <span class="block-pill" id="blockStat1">CHỜ</span>
+    <section class="tab-pane" id="pane-compass">
+      <div class="panel radar-panel">
+        <div class="label-row" style="width:100%; margin-bottom:0;">
+          <span class="label-cap">La bàn 5 trụ cột</span>
+          <span class="label-mono" id="pillarAvg">4.0 / 5</span>
         </div>
 
-        <div class="block-item" id="block2" onclick="toggleBlock(2)">
-          <div class="block-left">
-            <div class="block-top">
-              <span class="block-time">14:00-16:30</span>
-              <span class="block-name">Khối Đòn Bẩy</span>
-            </div>
-            <span class="block-desc">Vận hành hệ thống, tự động hóa, giao việc</span>
-          </div>
-          <span class="block-pill" id="blockStat2">CHỜ</span>
+        <svg id="radarSvg" width="190" height="170" viewBox="0 0 190 170"></svg>
+
+        <div class="diagnosis-box" id="diagnosisBox">
+          Cân bằng tốt. Duy trì nhịp độ hiện tại.
         </div>
 
-        <div class="block-item" id="block3" onclick="toggleBlock(3)">
-          <div class="block-left">
-            <div class="block-top">
-              <span class="block-time">16:30-17:30</span>
-              <span class="block-name">Khối Chuyển Đổi</span>
-            </div>
-            <span class="block-desc">Khách hàng, dòng tiền, truyền thông</span>
-          </div>
-          <span class="block-pill" id="blockStat3">CHỜ</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <span class="section-title">03 / La bàn 5 trụ cột</span>
-        <span class="section-meta" id="pillarAvg">5.0 / 5</span>
-      </div>
-
-      <div class="compass-wrap">
-        <div class="radar-box">
-          <svg id="radarSvg" width="150" height="150" viewBox="0 0 150 150"></svg>
-        </div>
-
-        <div class="pillar-list">
-          <div class="pillar-row">
-            <span class="pillar-name">Thân (Thể lực)</span>
-            <div class="pillar-controls">
+        <div class="pillar-grid">
+          <div class="pillar-item">
+            <span class="row-title">Thân (Thể lực)</span>
+            <div class="stepper">
               <button class="step-btn" onclick="stepPillar('health', -1)">-</button>
-              <span class="pillar-score" id="val_health">5</span>
+              <span class="step-val" id="val_health">4</span>
               <button class="step-btn" onclick="stepPillar('health', 1)">+</button>
             </div>
           </div>
-          <div class="pillar-row">
-            <span class="pillar-name">Tâm (Tĩnh tại)</span>
-            <div class="pillar-controls">
+          <div class="pillar-item">
+            <span class="row-title">Tâm (Tĩnh tại)</span>
+            <div class="stepper">
               <button class="step-btn" onclick="stepPillar('mind', -1)">-</button>
-              <span class="pillar-score" id="val_mind">5</span>
+              <span class="step-val" id="val_mind">4</span>
               <button class="step-btn" onclick="stepPillar('mind', 1)">+</button>
             </div>
           </div>
-          <div class="pillar-row">
-            <span class="pillar-name">Trí (Minh triết)</span>
-            <div class="pillar-controls">
+          <div class="pillar-item">
+            <span class="row-title">Trí (Minh triết)</span>
+            <div class="stepper">
               <button class="step-btn" onclick="stepPillar('intellect', -1)">-</button>
-              <span class="pillar-score" id="val_intellect">5</span>
+              <span class="step-val" id="val_intellect">4</span>
               <button class="step-btn" onclick="stepPillar('intellect', 1)">+</button>
             </div>
           </div>
-          <div class="pillar-row">
-            <span class="pillar-name">Nghiệp (Giá trị)</span>
-            <div class="pillar-controls">
+          <div class="pillar-item">
+            <span class="row-title">Nghiệp (Giá trị)</span>
+            <div class="stepper">
               <button class="step-btn" onclick="stepPillar('career', -1)">-</button>
-              <span class="pillar-score" id="val_career">5</span>
+              <span class="step-val" id="val_career">4</span>
               <button class="step-btn" onclick="stepPillar('career', 1)">+</button>
             </div>
           </div>
-          <div class="pillar-row">
-            <span class="pillar-name">Tiền (Tài sản)</span>
-            <div class="pillar-controls">
+          <div class="pillar-item">
+            <span class="row-title">Tiền (Tài sản)</span>
+            <div class="stepper">
               <button class="step-btn" onclick="stepPillar('money', -1)">-</button>
-              <span class="pillar-score" id="val_money">5</span>
+              <span class="step-val" id="val_money">4</span>
               <button class="step-btn" onclick="stepPillar('money', 1)">+</button>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="panel">
+        <div class="label-row">
+          <span class="label-cap">Văn - Tư - Tu</span>
+          <span class="label-mono">CHUYỂN HÓA</span>
+        </div>
+        <div class="ledger-stack">
+          <div class="ledger-item">
+            <label for="vttVan">VĂN (Tri thức nạp đúng)</label>
+            <input id="vttVan" type="text" placeholder="1 ý cốt lõi hôm nay..." onchange="saveVTT()">
+          </div>
+          <div class="ledger-item">
+            <label for="vttTu">TƯ (Điểm mù nhận ra)</label>
+            <input id="vttTu" type="text" placeholder="Tự soi chiếu hành vi..." onchange="saveVTT()">
+          </div>
+          <div class="ledger-item">
+            <label for="vttTuHanh">TU (Hành động sửa ngay)</label>
+            <input id="vttTuHanh" type="text" placeholder="1 việc làm cụ thể..." onchange="saveVTT()">
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <span class="section-title">04 / Văn - Tư - Tu</span>
-        <span class="section-meta">CHUYỂN HÓA</span>
+    <section class="tab-pane" id="pane-close">
+      <div class="panel">
+        <div class="label-row">
+          <span class="label-cap">Chốt sổ 3 dòng</span>
+          <span class="label-mono">21:30</span>
+        </div>
+        <div class="ledger-stack">
+          <div class="ledger-item">
+            <label for="close1">01. VIỆC ĐÃ DỨT ĐIỂM</label>
+            <input id="close1" type="text" placeholder="Kết quả thực chất hoàn thành">
+          </div>
+          <div class="ledger-item">
+            <label for="close2">02. CHỈ SỐ / DÒNG TIỀN</label>
+            <input id="close2" type="text" placeholder="Số liệu thực tế phát sinh">
+          </div>
+          <div class="ledger-item">
+            <label for="close3">03. ĐIỂM NGHẼN CẦN GỠ</label>
+            <input id="close3" type="text" placeholder="1 điểm cần Kaizen ngày mai">
+          </div>
+          <button class="btn-primary" style="width:100%;" onclick="saveCloseBook()">Khóa sổ hôm nay</button>
+        </div>
       </div>
-      <div class="ledger-group">
-        <div class="ledger-field">
-          <label class="ledger-label" for="vttVan">VĂN (Nạp đúng)</label>
-          <input id="vttVan" class="ledger-input" type="text" placeholder="1 tri thức cốt lõi nạp hôm nay" onchange="saveVTT()">
-        </div>
-        <div class="ledger-field">
-          <label class="ledger-label" for="vttTu">TƯ (Soi chiếu)</label>
-          <input id="vttTu" class="ledger-input" type="text" placeholder="Điểm mù hoặc sai lầm nhận ra" onchange="saveVTT()">
-        </div>
-        <div class="ledger-field">
-          <label class="ledger-label" for="vttTuHanh">TU (Sửa hành vi)</label>
-          <input id="vttTuHanh" class="ledger-input" type="text" placeholder="Hành động cụ thể làm ngay" onchange="saveVTT()">
-        </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="section-head">
-        <span class="section-title">05 / Chốt sổ 3 dòng</span>
-        <span class="section-meta">21:30</span>
+      <div>
+        <div class="label-row">
+          <span class="label-cap">Nhật ký cục bộ</span>
+          <span class="label-mono" id="historyCount">0 bản ghi</span>
+        </div>
+        <div class="list-group" id="historyList"></div>
       </div>
-      <div class="ledger-group">
-        <div class="ledger-field">
-          <label class="ledger-label" for="close1">01. VIỆC ĐÃ DỨT ĐIỂM</label>
-          <input id="close1" class="ledger-input" type="text" placeholder="Kết quả thực chất hoàn thành">
-        </div>
-        <div class="ledger-field">
-          <label class="ledger-label" for="close2">02. CHỈ SỐ / DÒNG TIỀN</label>
-          <input id="close2" class="ledger-input" type="text" placeholder="Số liệu phát sinh thực tế">
-        </div>
-        <div class="ledger-field">
-          <label class="ledger-label" for="close3">03. ĐIỂM NGHẼN CẦN GỠ</label>
-          <input id="close3" class="ledger-input" type="text" placeholder="1 việc cần Kaizen ngày mai">
-        </div>
-      </div>
-      <div class="save-row">
-        <button class="btn-primary" onclick="saveCloseBook()">Lưu chốt sổ</button>
+
+      <div class="quick-strip">
+        <button class="btn-secondary" onclick="exportData()">Xuất sao lưu JSON</button>
+        <label class="btn-secondary" style="text-align:center; cursor:pointer;">
+          Khôi phục JSON
+          <input type="file" accept=".json" style="display:none;" onchange="importData(event)">
+        </label>
       </div>
     </section>
   </main>
 
-  <nav class="bottom-bar">
-    <button class="nav-btn active" onclick="scrollToTop()">Hôm nay</button>
-    <button class="nav-btn" onclick="openFocus()">Khối sâu</button>
-    <button class="nav-btn" onclick="openHistory()">Nhật ký</button>
+  <nav class="tabbar">
+    <button class="tab-btn active" id="tab-today" onclick="switchTab('today')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+      <span>Hôm nay</span>
+    </button>
+    <button class="tab-btn" id="tab-compass" onclick="switchTab('compass')">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>
+      <span>La bàn</span>
+    </button>
+    <button class="tab-btn" id="tab-close" onclick="switchTab('close')">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Chốt sổ</span>
+    </button>
   </nav>
 </div>
 
-<div class="overlay" id="focusOverlay">
-  <div class="focus-container">
-    <div class="focus-eyebrow">CHẾ ĐỘ KHỐI SÂU</div>
-    <div class="timer-ring">
-      <svg width="220" height="220" viewBox="0 0 220 220">
-        <circle cx="110" cy="110" r="102" fill="none" stroke="#26282E" stroke-width="2"></circle>
-        <circle id="timerArc" cx="110" cy="110" r="102" fill="none" stroke="#C8A253" stroke-width="2.5" stroke-dasharray="640.88" stroke-dashoffset="0"></circle>
-      </svg>
-      <div class="timer-digits" id="timerDisplay">90:00</div>
-    </div>
-    <div class="focus-task" id="focusTaskLabel">Chưa khóa tiêu điểm</div>
-    <div class="focus-controls">
-      <button class="btn-primary" id="timerToggleBtn" onclick="toggleTimer()">Tạm dừng</button>
-      <button class="btn-ghost" onclick="resetTimer()">Đặt lại</button>
-      <button class="btn-ghost" onclick="closeFocus()">Đóng</button>
-    </div>
+<div class="modal" id="focusModal">
+  <div class="modal-eyebrow">KHỐI SÂU 90 PHÚT</div>
+  <div class="ring-wrap">
+    <svg width="220" height="220" viewBox="0 0 220 220">
+      <circle cx="110" cy="110" r="102" fill="none" stroke="#272930" stroke-width="2"></circle>
+      <circle id="timerArc" cx="110" cy="110" r="102" fill="none" stroke="#C8A253" stroke-width="2.5" stroke-dasharray="640.88" stroke-dashoffset="0"></circle>
+    </svg>
+    <div class="ring-time" id="timerDisplay">90:00</div>
+  </div>
+  <div class="modal-task" id="focusTaskLabel">Chưa khóa tiêu điểm</div>
+  <div class="modal-actions">
+    <button class="btn-primary" id="timerToggleBtn" onclick="toggleTimer()">Tạm dừng</button>
+    <button class="btn-secondary" onclick="resetTimer()">Đặt lại</button>
+    <button class="btn-secondary" onclick="closeFocus()">Thu gọn</button>
   </div>
 </div>
 
-<div class="overlay" id="historyOverlay">
-  <div class="focus-container" style="max-width:440px;">
-    <div class="focus-eyebrow">NHẬT KÝ LƯU TRỮ CỤC BỘ</div>
-    <div class="history-list" id="historyList"></div>
-    <div class="focus-controls">
-      <button class="btn-primary" onclick="exportData()">Xuất JSON</button>
-      <button class="btn-ghost" onclick="closeHistory()">Đóng</button>
-    </div>
+<div class="modal" id="breathModal">
+  <div class="modal-eyebrow">CẮT CƠN DOPAMINE 60S</div>
+  <div class="breath-circle" id="breathCircle">HÍT VÀO</div>
+  <div class="modal-task" id="breathPrompt">Việc bạn sắp làm có phục vụ mục tiêu sống còn hôm nay không?</div>
+  <div class="modal-actions">
+    <button class="btn-secondary" onclick="closeBreath()">Thoát</button>
   </div>
 </div>
 
@@ -871,25 +904,24 @@
   const STORAGE_KEY = 'X3_NHIP_SONG_DATA_V1';
   const todayKey = new Date().toISOString().split('T')[0];
 
-  function updateNetStatus() {
-    const el = document.getElementById('netState');
-    el.textContent = navigator.onLine ? 'LOCAL READY' : 'OFFLINE';
+  const PROMPTS = [
+    'Việc bạn sắp làm có phục vụ mục tiêu sống còn hôm nay không?',
+    'Bạn đang hành động vì giá trị dài hạn hay trốn chạy cảm giác nhàm chán?',
+    'Nếu hôm nay chỉ làm được đúng 1 việc, có phải là việc này không?',
+    'Cơn thèm kích thích này sẽ biến mất sau 60 giây hít thở sâu.'
+  ];
+
+  function haptic() {
+    if (navigator.vibrate) navigator.vibrate(10);
   }
-  window.addEventListener('online', updateNetStatus);
-  window.addEventListener('offline', updateNetStatus);
 
   function loadStore() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    } catch {
-      return {};
-    }
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+    catch { return {}; }
   }
 
   function saveStore(data) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch {}
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
   }
 
   function notify(msg) {
@@ -900,7 +932,7 @@
     window._toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
   }
 
-  const store = loadStore();
+  let store = loadStore();
   if (!store[todayKey]) {
     store[todayKey] = {
       oneThing: '',
@@ -912,13 +944,36 @@
     };
     saveStore(store);
   }
-  const day = store[todayKey];
+
+  function currentDay() {
+    return store[todayKey];
+  }
+
+  function switchTab(name) {
+    haptic();
+    const titles = { today: 'Hôm nay', compass: 'La bàn & Chuyển hóa', close: 'Chốt sổ & Nhật ký' };
+    document.getElementById('topbarTitle').textContent = titles[name];
+    ['today', 'compass', 'close'].forEach(t => {
+      document.getElementById('pane-' + t).classList.toggle('active', t === name);
+      document.getElementById('tab-' + t).classList.toggle('active', t === name);
+    });
+    if (name === 'close') renderHistory();
+    if (name === 'compass') drawRadar();
+  }
+
+  function highlightCurrentBlock() {
+    const h = new Date().getHours() + new Date().getMinutes() / 60;
+    document.getElementById('block1').classList.toggle('current', h >= 8 && h < 12);
+    document.getElementById('block2').classList.toggle('current', h >= 13.5 && h < 16.5);
+    document.getElementById('block3').classList.toggle('current', h >= 16.5 && h < 18);
+  }
 
   function drawRadar() {
+    const day = currentDay();
     const svg = document.getElementById('radarSvg');
     const keys = ['health', 'mind', 'intellect', 'career', 'money'];
     const labels = ['Thân', 'Tâm', 'Trí', 'Nghiệp', 'Tiền'];
-    const cx = 75, cy = 75, maxR = 48;
+    const cx = 95, cy = 88, maxR = 54;
     let html = '';
 
     for (let lvl = 1; lvl <= 5; lvl++) {
@@ -927,17 +982,17 @@
         const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
         return `${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`;
       }).join(' ');
-      html += `<polygon points="${pts}" fill="none" stroke="${lvl === 5 ? '#383B44' : '#22242A'}" stroke-width="1" />`;
+      html += `<polygon points="${pts}" fill="none" stroke="${lvl === 5 ? '#3A3D47' : '#24262D'}" stroke-width="1" />`;
     }
 
     keys.forEach((_, i) => {
       const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
       const x2 = cx + maxR * Math.cos(angle);
       const y2 = cy + maxR * Math.sin(angle);
-      const lx = cx + (maxR + 14) * Math.cos(angle);
-      const ly = cy + (maxR + 14) * Math.sin(angle) + 3;
-      html += `<line x1="${cx}" y1="${cy}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#26282E" stroke-width="1" />`;
-      html += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" fill="#92969E" font-size="9" font-family="sans-serif">${labels[i]}</text>`;
+      const lx = cx + (maxR + 18) * Math.cos(angle);
+      const ly = cy + (maxR + 18) * Math.sin(angle) + 3;
+      html += `<line x1="${cx}" y1="${cy}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#272930" stroke-width="1" />`;
+      html += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" fill="#9498A1" font-size="10" font-family="sans-serif">${labels[i]}</text>`;
     });
 
     const dataPts = keys.map((k, i) => {
@@ -946,31 +1001,68 @@
       const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
       return `${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`;
     }).join(' ');
-    html += `<polygon points="${dataPts}" fill="rgba(200, 162, 83, 0.18)" stroke="#C8A253" stroke-width="1.5" />`;
+    html += `<polygon points="${dataPts}" fill="rgba(200, 162, 83, 0.16)" stroke="#C8A253" stroke-width="1.5" />`;
 
     svg.innerHTML = html;
+
+    const nameMap = { health: 'Thân', mind: 'Tâm', intellect: 'Trí', career: 'Nghiệp', money: 'Tiền' };
+    let minKey = 'health', minVal = 6;
+    keys.forEach(k => {
+      if (day.pillars[k] < minVal) { minVal = day.pillars[k]; minKey = k; }
+    });
+    const diag = document.getElementById('diagnosisBox');
+    if (minVal <= 2) {
+      diag.textContent = `Điểm nghẽn: ${nameMap[minKey]} (${minVal}/5). Cần ưu tiên gỡ trụ cột này trước khi mở rộng việc khác.`;
+    } else if (minVal === 3) {
+      diag.textContent = `Trụ cột ${nameMap[minKey]} đang ở mức trung bình (3/5). Giữ kỷ luật nhịp ngày.`;
+    } else {
+      diag.textContent = '5 trụ cột đang cân bằng tốt. Giữ vững nhịp độ hiện tại.';
+    }
+  }
+
+  function renderHistory() {
+    const listEl = document.getElementById('historyList');
+    const keys = Object.keys(store).sort().reverse();
+    document.getElementById('historyCount').textContent = `${keys.length} ngày`;
+    listEl.innerHTML = keys.map(k => {
+      const d = store[k];
+      const blocksDone = [1, 2, 3].filter(i => d.blocks && d.blocks[i]).length;
+      const ot = d.oneThing ? d.oneThing : 'Chưa đặt tiêu điểm';
+      const c1 = d.closeBook && d.closeBook.c1 ? ` | Chốt: ${d.closeBook.c1}` : '';
+      return `
+        <div class="history-row">
+          <div class="history-top">
+            <span>${k}</span>
+            <span>Khối ${blocksDone}/3</span>
+          </div>
+          <div class="history-body">${ot}${c1}</div>
+        </div>
+      `;
+    }).join('');
   }
 
   function render() {
-    document.getElementById('headerDate').textContent = todayKey;
-    updateNetStatus();
+    const day = currentDay();
+    document.getElementById('headerDate').textContent = todayKey.slice(5);
+    document.getElementById('streakChip').textContent = `${Object.keys(store).length} ngày`;
+    highlightCurrentBlock();
 
     const emptyEl = document.getElementById('onethingEmpty');
-    const lockedEl = document.getElementById('onethingLocked');
+    const activeEl = document.getElementById('onethingActive');
     const dispEl = document.getElementById('onethingDisplay');
     const chkEl = document.getElementById('onethingCheck');
 
     if (day.oneThing) {
       emptyEl.style.display = 'none';
-      lockedEl.style.display = 'flex';
+      activeEl.style.display = 'flex';
       dispEl.textContent = day.oneThing;
       dispEl.classList.toggle('done', !!day.oneThingDone);
-      chkEl.classList.toggle('checked', !!day.oneThingDone);
+      chkEl.classList.toggle('done', !!day.oneThingDone);
       chkEl.textContent = day.oneThingDone ? '✓' : '';
       document.getElementById('focusTaskLabel').textContent = day.oneThing;
     } else {
       emptyEl.style.display = 'flex';
-      lockedEl.style.display = 'none';
+      activeEl.style.display = 'none';
       document.getElementById('focusTaskLabel').textContent = 'Chưa khóa tiêu điểm';
     }
 
@@ -987,10 +1079,9 @@
 
     let sum = 0;
     for (const k in day.pillars) {
-      const val = day.pillars[k];
-      sum += val;
+      sum += day.pillars[k];
       const el = document.getElementById('val_' + k);
-      if (el) el.textContent = val;
+      if (el) el.textContent = day.pillars[k];
     }
     document.getElementById('pillarAvg').textContent = `${(sum / 5).toFixed(1)} / 5`;
     drawRadar();
@@ -1006,6 +1097,8 @@
   function lockOneThing() {
     const val = document.getElementById('onethingInput').value.trim();
     if (!val) return;
+    haptic();
+    const day = currentDay();
     day.oneThing = val;
     day.oneThingDone = false;
     saveStore(store);
@@ -1014,12 +1107,15 @@
   }
 
   function toggleOneThing() {
+    haptic();
+    const day = currentDay();
     day.oneThingDone = !day.oneThingDone;
     saveStore(store);
     render();
   }
 
   function resetOneThing() {
+    const day = currentDay();
     day.oneThing = '';
     day.oneThingDone = false;
     document.getElementById('onethingInput').value = '';
@@ -1028,12 +1124,16 @@
   }
 
   function toggleBlock(idx) {
+    haptic();
+    const day = currentDay();
     day.blocks[idx] = !day.blocks[idx];
     saveStore(store);
     render();
   }
 
   function stepPillar(key, delta) {
+    haptic();
+    const day = currentDay();
     const cur = day.pillars[key] || 3;
     const next = Math.max(1, Math.min(5, cur + delta));
     if (next !== cur) {
@@ -1044,6 +1144,7 @@
   }
 
   function saveVTT() {
+    const day = currentDay();
     day.vtt.van = document.getElementById('vttVan').value.trim();
     day.vtt.tu = document.getElementById('vttTu').value.trim();
     day.vtt.tuHanh = document.getElementById('vttTuHanh').value.trim();
@@ -1052,12 +1153,15 @@
   }
 
   function saveCloseBook() {
+    haptic();
+    const day = currentDay();
     day.closeBook.c1 = document.getElementById('close1').value.trim();
     day.closeBook.c2 = document.getElementById('close2').value.trim();
     day.closeBook.c3 = document.getElementById('close3').value.trim();
     day.closeBook.done = true;
     saveStore(store);
-    notify('Đã lưu chốt sổ 3 dòng');
+    renderHistory();
+    notify('Đã khóa sổ hôm nay');
   }
 
   const TOTAL_SEC = 90 * 60;
@@ -1069,14 +1173,16 @@
   function renderTimer() {
     const m = Math.floor(secondsLeft / 60);
     const s = secondsLeft % 60;
-    document.getElementById('timerDisplay').textContent =
-      `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    const str = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    document.getElementById('timerDisplay').textContent = str;
+    document.getElementById('inlineTimer').textContent = str;
     const progress = 1 - secondsLeft / TOTAL_SEC;
     document.getElementById('timerArc').style.strokeDashoffset = (CIRCUMFERENCE * progress).toFixed(2);
     document.getElementById('timerToggleBtn').textContent = timerRunning ? 'Tạm dừng' : 'Tiếp tục';
+    document.getElementById('inlineTimerSub').textContent = timerRunning ? 'Đang chạy Khối Sâu' : 'Bộ đếm Khối Sâu ngoại tuyến';
   }
 
-  function startTimerInterval() {
+  function startTimer() {
     if (timerId) clearInterval(timerId);
     timerRunning = true;
     timerId = setInterval(() => {
@@ -1094,21 +1200,20 @@
   }
 
   function openFocus() {
-    document.getElementById('focusOverlay').classList.add('open');
-    if (!timerRunning && secondsLeft === TOTAL_SEC) {
-      startTimerInterval();
-    } else {
-      renderTimer();
-    }
+    haptic();
+    document.getElementById('focusModal').classList.add('open');
+    if (!timerRunning && secondsLeft === TOTAL_SEC) startTimer();
+    else renderTimer();
   }
 
   function toggleTimer() {
+    haptic();
     if (timerRunning) {
       clearInterval(timerId);
       timerRunning = false;
       renderTimer();
     } else {
-      startTimerInterval();
+      startTimer();
     }
   }
 
@@ -1120,29 +1225,33 @@
   }
 
   function closeFocus() {
-    document.getElementById('focusOverlay').classList.remove('open');
+    document.getElementById('focusModal').classList.remove('open');
   }
 
-  function openHistory() {
-    const listEl = document.getElementById('historyList');
-    const keys = Object.keys(store).sort().reverse();
-    listEl.innerHTML = keys.map(k => {
-      const d = store[k];
-      const blocksDone = [1, 2, 3].filter(i => d.blocks && d.blocks[i]).length;
-      const ot = d.oneThing ? d.oneThing : '(Chưa đặt tiêu điểm)';
-      const c1 = d.closeBook && d.closeBook.c1 ? ` | Chốt: ${d.closeBook.c1}` : '';
-      return `
-        <div class="history-item">
-          <div class="history-date">${k} · Khối ${blocksDone}/3</div>
-          <div class="history-line">${ot}${c1}</div>
-        </div>
-      `;
-    }).join('');
-    document.getElementById('historyOverlay').classList.add('open');
+  let breathInterval = null;
+  function openBreath() {
+    haptic();
+    const circle = document.getElementById('breathCircle');
+    document.getElementById('breathPrompt').textContent = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
+    document.getElementById('breathModal').classList.add('open');
+    let phase = 0;
+    const runCycle = () => {
+      if (phase === 0) {
+        circle.textContent = 'HÍT VÀO';
+        circle.style.transform = 'scale(1.22)';
+      } else {
+        circle.textContent = 'THỞ RA';
+        circle.style.transform = 'scale(0.92)';
+      }
+      phase = 1 - phase;
+    };
+    runCycle();
+    breathInterval = setInterval(runCycle, 4000);
   }
 
-  function closeHistory() {
-    document.getElementById('historyOverlay').classList.remove('open');
+  function closeBreath() {
+    clearInterval(breathInterval);
+    document.getElementById('breathModal').classList.remove('open');
   }
 
   function exportData() {
@@ -1153,11 +1262,28 @@
     a.download = `x3-nhip-song-${todayKey}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    notify('Đã xuất file JSON');
+    notify('Đã xuất sao lưu JSON');
   }
 
-  function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  function importData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        if (typeof parsed === 'object' && parsed !== null) {
+          store = Object.assign({}, store, parsed);
+          saveStore(store);
+          render();
+          renderHistory();
+          notify('Đã khôi phục dữ liệu');
+        }
+      } catch {
+        notify('File JSON không hợp lệ');
+      }
+    };
+    reader.readAsText(file);
   }
 
   render();
